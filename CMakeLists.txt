@@ -2,5 +2,23 @@ cmake_minimum_required(VERSION 3.27)
 project(MidProjectMugnaiLorenzo)
 
 set(CMAKE_CXX_STANDARD 17)
-
-add_executable(MidProjectMugnaiLorenzo main.cpp)
+find_package(OpenMP REQUIRED)
+find_package (Python COMPONENTS Interpreter Development REQUIRED)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+add_executable(MidProjectMugnaiLorenzo main.cpp
+        SoA/ParallelSoA.cpp
+        SoA/ParallelSoA.h
+        SoA/SequentialSoA.cpp
+        SoA/SequentialSoA.h
+        AoS/ParallelAoS.cpp
+        AoS/ParallelAoS.h
+        AoS/SequentialAoS.cpp
+        AoS/SequentialAoS.h
+        AoS/Ngram.cpp
+        AoS/Ngram.h
+        AoS/Manage.cpp
+        AoS/Manage.h
+        include/gplot++.h
+        AoS/ManageParallel.cpp
+        AoS/ManageParallel.h)
+target_link_libraries(MidProjectMugnaiLorenzo OpenMP::OpenMP_CXX)
