@@ -5,10 +5,10 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include "Manage.h"
 #include <omp.h>
 #include <map>
 #include <algorithm>
-#include "Manage.h"
 
 using namespace std;
 
@@ -25,7 +25,6 @@ public:
     void print();
 
     vector<double> getTime();
-
 
 private:
     vector<string> texts;

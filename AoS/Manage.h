@@ -17,7 +17,6 @@ public:
     void printBi();
 
 private:
-//    map<string, Ngram *> bigrams;
     vector<Ngram *> bigrams;
     vector<Ngram *> trigrams;
 };

@@ -3,7 +3,6 @@ project(MidProjectMugnaiLorenzo)
 
 set(CMAKE_CXX_STANDARD 17)
 find_package(OpenMP REQUIRED)
-find_package (Python COMPONENTS Interpreter Development REQUIRED)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 add_executable(MidProjectMugnaiLorenzo main.cpp
         SoA/ParallelSoA.cpp
@@ -18,7 +17,7 @@ add_executable(MidProjectMugnaiLorenzo main.cpp
         AoS/Ngram.h
         AoS/Manage.cpp
         AoS/Manage.h
-        include/gplot++.h
+        include/gnuplot.h
         AoS/ManageParallel.cpp
         AoS/ManageParallel.h)
 target_link_libraries(MidProjectMugnaiLorenzo OpenMP::OpenMP_CXX)

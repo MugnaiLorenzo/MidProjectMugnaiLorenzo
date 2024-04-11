@@ -8,7 +8,6 @@ SequentialAoS::SequentialAoS(vector<string> t) {
 
 void SequentialAoS::sequential_function() {
     double start_time, end_time;
-    int n, i = 0;
     for (const auto &text: texts) {
         start_time = omp_get_wtime();
         generateBigrams(text);
@@ -29,7 +28,7 @@ void SequentialAoS::generateBigrams(const std::string &text) {
 }
 
 double SequentialAoS::calc_average() {
-    double tot;
+    double tot = 0;
     for (int j = 0; j < time.size(); j++) {
         tot = tot + time[j];
     }

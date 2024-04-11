@@ -31,7 +31,7 @@ void Manage::printBi() {
         return (a->getCount() > b->getCount());
     });
     Gnuplot gnuplot{};
-    gnuplot.redirect_to_png("./../Image/HistogramSequentialAoS.png");
+    gnuplot.redirect_to_png("./../Image/AoS/HistogramSequentialAoS.png");
     for (int i = 0; i < 30; i++) {
         std::vector<int> x;
         for (int j = 0; j < bigrams[i]->getCount(); j++) {

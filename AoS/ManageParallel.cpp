@@ -33,7 +33,7 @@ void ManageParallel::printBi() {
         return (a->getCount() > b->getCount());
     });
     Gnuplot gnuplot{};
-    gnuplot.redirect_to_png("./../Image/HistogramParallelAoS.png");
+    gnuplot.redirect_to_png("./../Image/AoS/HistogramParallelAoS.png");
     for (int i = 0; i < 30; i++) {
         std::vector<int> x;
         for (int j = 0; j < bigrams[i]->getCount(); j++) {
