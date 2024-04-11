@@ -60,9 +60,9 @@ int main() {
     ParallelSoA *pSoA = new ParallelSoA(texts);
     pSoA->print_bi();
     pSoA->print_tri();
-    print(pSoA->getTime_bi(), "SequentialSoA", sSoA->getTime_bi(), "ParallelSoA",
+    print(sSoA->getTime_bi(), "SequentialSoA", pSoA->getTime_bi(), "ParallelSoA",
           "./../Image/SoA/SoA_Parallel_vs_Sequential_Bi.png");
-    print(pSoA->getTime_tri(), "SequentialSoA", sSoA->getTime_tri(), "ParallelSoA",
+    print(sSoA->getTime_tri(), "SequentialSoA", pSoA->getTime_tri(), "ParallelSoA",
           "./../Image/SoA/SoA_Parallel_vs_Sequential_Tri.png");
     printAverage(s, p, sSoA, pSoA);
     return 0;

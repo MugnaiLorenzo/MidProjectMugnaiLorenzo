@@ -9,11 +9,13 @@ ParallelAoS::ParallelAoS(vector<string> t) {
 
 void ParallelAoS::sequential_function() {
     double start_time, end_time;
+    double t = 0;
     for (const auto &text: texts) {
         start_time = omp_get_wtime();
         generateBigrams(text);
         end_time = omp_get_wtime();
-        time.push_back(end_time - start_time);
+        t = t + end_time - start_time;
+        time.push_back(t);
     }
 }
 

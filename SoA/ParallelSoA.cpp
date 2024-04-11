@@ -7,15 +7,19 @@ ParallelSoA::ParallelSoA(vector<string> t) {
 
 void ParallelSoA::sequential_function() {
     double start_time, end_time;
+    double t_bi = 0;
+    double t_tri = 0;
     for (const auto &text: texts) {
         start_time = omp_get_wtime();
         generateBigrams(text);
         end_time = omp_get_wtime();
-        time_bi.push_back(end_time - start_time);
+        t_bi = t_bi + end_time - start_time;
+        time_bi.push_back(t_bi);
         start_time = omp_get_wtime();
         generateTrigrams(text);
         end_time = omp_get_wtime();
-        time_tri.push_back(end_time - start_time);
+        t_tri = t_tri + end_time - start_time;
+        time_tri.push_back(t_tri);
     }
 }
 
