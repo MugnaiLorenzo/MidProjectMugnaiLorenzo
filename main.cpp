@@ -46,7 +46,7 @@ void printAverage(SequentialAoS *s, ParallelAoS *p, SequentialSoA *sSoA, Paralle
 }
 
 int main() {
-    int n_book = 15;
+    int n_book = 28;
     vector<string> texts;
     load_file(n_book, &texts);
     SequentialAoS *s = new SequentialAoS(texts);
