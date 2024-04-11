@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="MidProjectMugnaiLorenzo"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -j12 -f &quot;/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/gmake -j12 -f &quot;/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -j12 -f &quot;/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -j12 -f &quot;/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="MidProjectMugnaiLorenzo">
+				<Option output="/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/cmake-build-debug/MidProjectMugnaiLorenzo" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/include"/>
+					<Add directory="/usr/include/c++/13"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/13"/>
+					<Add directory="/usr/include/c++/13/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/13/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -j12 -f &quot;/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/cmake-build-debug/Makefile&quot;  VERBOSE=1 MidProjectMugnaiLorenzo"/>
+					<CompileFile command="/usr/bin/gmake -j12 -f &quot;/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -j12 -f &quot;/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -j12 -f &quot;/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="MidProjectMugnaiLorenzo/fast">
+				<Option output="/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/cmake-build-debug/MidProjectMugnaiLorenzo" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/include"/>
+					<Add directory="/usr/include/c++/13"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/13"/>
+					<Add directory="/usr/include/c++/13/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/13/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -j12 -f &quot;/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/cmake-build-debug/Makefile&quot;  VERBOSE=1 MidProjectMugnaiLorenzo/fast"/>
+					<CompileFile command="/usr/bin/gmake -j12 -f &quot;/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -j12 -f &quot;/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -j12 -f &quot;/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -j12 -f &quot;/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/gmake -j12 -f &quot;/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -j12 -f &quot;/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -j12 -f &quot;/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -j12 -f &quot;/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/gmake -j12 -f &quot;/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -j12 -f &quot;/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -j12 -f &quot;/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/AoS/Manage.cpp">
+			<Option target="MidProjectMugnaiLorenzo"/>
+		</Unit>
+		<Unit filename="/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/AoS/Manage.h">
+			<Option target="MidProjectMugnaiLorenzo"/>
+		</Unit>
+		<Unit filename="/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/AoS/ManageParallel.cpp">
+			<Option target="MidProjectMugnaiLorenzo"/>
+		</Unit>
+		<Unit filename="/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/AoS/ManageParallel.h">
+			<Option target="MidProjectMugnaiLorenzo"/>
+		</Unit>
+		<Unit filename="/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/AoS/Ngram.cpp">
+			<Option target="MidProjectMugnaiLorenzo"/>
+		</Unit>
+		<Unit filename="/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/AoS/Ngram.h">
+			<Option target="MidProjectMugnaiLorenzo"/>
+		</Unit>
+		<Unit filename="/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/AoS/ParallelAoS.cpp">
+			<Option target="MidProjectMugnaiLorenzo"/>
+		</Unit>
+		<Unit filename="/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/AoS/ParallelAoS.h">
+			<Option target="MidProjectMugnaiLorenzo"/>
+		</Unit>
+		<Unit filename="/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/AoS/SequentialAoS.cpp">
+			<Option target="MidProjectMugnaiLorenzo"/>
+		</Unit>
+		<Unit filename="/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/AoS/SequentialAoS.h">
+			<Option target="MidProjectMugnaiLorenzo"/>
+		</Unit>
+		<Unit filename="/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/SoA/ParallelSoA.cpp">
+			<Option target="MidProjectMugnaiLorenzo"/>
+		</Unit>
+		<Unit filename="/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/SoA/ParallelSoA.h">
+			<Option target="MidProjectMugnaiLorenzo"/>
+		</Unit>
+		<Unit filename="/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/SoA/SequentialSoA.cpp">
+			<Option target="MidProjectMugnaiLorenzo"/>
+		</Unit>
+		<Unit filename="/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/SoA/SequentialSoA.h">
+			<Option target="MidProjectMugnaiLorenzo"/>
+		</Unit>
+		<Unit filename="/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/include/gnuplot.h">
+			<Option target="MidProjectMugnaiLorenzo"/>
+		</Unit>
+		<Unit filename="/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/main.cpp">
+			<Option target="MidProjectMugnaiLorenzo"/>
+		</Unit>
+		<Unit filename="/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>
