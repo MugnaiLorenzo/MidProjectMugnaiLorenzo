@@ -151,16 +151,12 @@ CMakeFiles/MidProjectMugnaiLorenzo.dir/main.cpp.o: \
  /usr/include/c++/13/bits/ostream.tcc /usr/include/c++/13/istream \
  /usr/include/c++/13/bits/istream.tcc \
  /home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/AoS/SequentialAoS.h \
- /usr/include/c++/13/fstream /usr/include/c++/13/bits/codecvt.h \
- /usr/include/x86_64-linux-gnu/c++/13/bits/basic_file.h \
- /usr/include/x86_64-linux-gnu/c++/13/bits/c++io.h \
- /usr/include/c++/13/bits/fstream.tcc /usr/include/c++/13/vector \
- /usr/include/c++/13/bits/stl_uninitialized.h \
+ /usr/include/c++/13/vector /usr/include/c++/13/bits/stl_uninitialized.h \
  /usr/include/c++/13/bits/stl_vector.h \
  /usr/include/c++/13/bits/stl_bvector.h \
  /usr/include/c++/13/bits/vector.tcc \
- /home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/AoS/Manage.h \
  /home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/AoS/Ngram.h \
+ /home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/AoS/ParallelAoS.h \
  /home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/AoS/../include/gplot++.h \
  /usr/include/c++/13/algorithm /usr/include/c++/13/bits/stl_algo.h \
  /usr/include/c++/13/bits/algorithmfwd.h \
@@ -200,14 +196,16 @@ CMakeFiles/MidProjectMugnaiLorenzo.dir/main.cpp.o: \
  /usr/include/x86_64-linux-gnu/bits/getopt_core.h \
  /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
  /usr/include/linux/close_range.h \
- /usr/lib/gcc/x86_64-linux-gnu/13/include/omp.h /usr/include/c++/13/map \
- /usr/include/c++/13/bits/stl_tree.h \
+ /home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/SoA/SequentialSoA.h \
+ /usr/include/c++/13/map /usr/include/c++/13/bits/stl_tree.h \
  /usr/include/c++/13/ext/aligned_buffer.h \
  /usr/include/c++/13/bits/node_handle.h \
  /usr/include/c++/13/bits/stl_map.h \
  /usr/include/c++/13/bits/stl_multimap.h \
  /usr/include/c++/13/bits/erase_if.h \
- /home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/AoS/ParallelAoS.h \
- /home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/AoS/ManageParallel.h \
- /home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/SoA/SequentialSoA.h \
- /home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/SoA/ParallelSoA.h
+ /home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/SoA/ParallelSoA.h \
+ /usr/include/c++/13/fstream /usr/include/c++/13/bits/codecvt.h \
+ /usr/include/x86_64-linux-gnu/c++/13/bits/basic_file.h \
+ /usr/include/x86_64-linux-gnu/c++/13/bits/c++io.h \
+ /usr/include/c++/13/bits/fstream.tcc \
+ /usr/lib/gcc/x86_64-linux-gnu/13/include/omp.h

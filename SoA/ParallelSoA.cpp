@@ -1,8 +1,38 @@
 #include "ParallelSoA.h"
+#include <fstream>
+#include <omp.h>
+#include <algorithm>
+#include "../include/gplot++.h"
 
-ParallelSoA::ParallelSoA(vector<string> t) {
-    texts = t;
-    ParallelSoA::sequential_function();
+ParallelSoA::ParallelSoA(int n) {
+    load_file(n);
+#pragma omp barrier
+    sequential_function();
+}
+
+void ParallelSoA::load_file(int n) {
+    string title;
+#pragma omp parallel for shared(n)
+    for (int i = 0; i < n; i++) {
+        title = "./../Testi/book" + to_string(i) + ".txt";
+        string text;
+        ifstream newfile;
+        while (!newfile.is_open()) {
+            newfile.open(title, ios::in);
+        }
+        if (newfile.is_open()) {
+            string currentLine;
+            while (getline(newfile, currentLine)) {
+                if (!currentLine.empty()) {
+                    text += currentLine;
+                    text += "\n";
+                }
+            }
+            newfile.close();
+        }
+#pragma omp critical
+        texts.push_back(text);
+    }
 }
 
 void ParallelSoA::sequential_function() {
@@ -25,39 +55,76 @@ void ParallelSoA::sequential_function() {
 
 void ParallelSoA::generateBigrams(const std::string &text) {
     int n = 2;
-#pragma omp parallel for default(none) shared(text, n)
-    for (int i = 0; i < text.length() - n + 1; ++i) {
-        string ngram = text.substr(i, n);
-        transform(ngram.begin(), ngram.end(), ngram.begin(), ::tolower);
-        if (all_of(ngram.begin(), ngram.end(), ::isalpha)) {
-            if (bigrams.find(ngram) != bigrams.end()) {
-#pragma omp critical
-                bigrams[ngram] += 1;
-            } else {
-#pragma omp critical
-                bigrams[ngram] += 0;
+    map<string, int> bigrams_local;
+#pragma omp parallel default(none) private(bigrams_local) shared(text, n)
+    {
+#pragma omp for nowait
+        for (int i = 0; i < text.length() - n + 1; ++i) {
+            string ngram = text.substr(i, n);
+            transform(ngram.begin(), ngram.end(), ngram.begin(), ::tolower);
+            if (all_of(ngram.begin(), ngram.end(), ::isalpha)) {
+                if (bigrams_local.find(ngram) != bigrams_local.end()) {
+                    bigrams_local[ngram] += 1;
+                } else {
+                    bigrams_local[ngram] = 1;
+                }
             }
+        }
+#pragma omp critical
+        {
+            merge_bigrams(bigrams_local);
+        }
+    }
+}
+
+void ParallelSoA::merge_bigrams(map<string, int> local_bigrams) {
+    map<string, int>::iterator it;
+    for (it = local_bigrams.begin(); it != local_bigrams.end(); it++)
+    {
+        if (bigrams.find(it->first) != bigrams.end()) {
+            bigrams[it->first] += it->second;
+        } else {
+            bigrams[it->first] += it->second;
         }
     }
 }
 
 void ParallelSoA::generateTrigrams(const std::string &text) {
     int n = 3;
-#pragma omp parallel for default(none) shared(text, n)
-    for (int i = 0; i < text.length() - n + 1; ++i) {
-        string ngram = text.substr(i, n);
-        transform(ngram.begin(), ngram.end(), ngram.begin(), ::tolower);
-        if (all_of(ngram.begin(), ngram.end(), ::isalpha)) {
-            if (trigrams.find(ngram) != trigrams.end()) {
-#pragma omp critical
-                trigrams[ngram] += 1;
-            } else {
-#pragma omp critical
-                trigrams[ngram] += 0;
+    map<string, int> trigrams_local;
+#pragma omp parallel default(none) private(trigrams_local) shared(text, n)
+    {
+#pragma omp for nowait
+        for (int i = 0; i < text.length() - n + 1; ++i) {
+            string ngram = text.substr(i, n);
+            transform(ngram.begin(), ngram.end(), ngram.begin(), ::tolower);
+            if (all_of(ngram.begin(), ngram.end(), ::isalpha)) {
+                if (trigrams_local.find(ngram) != trigrams_local.end()) {
+                    trigrams_local[ngram] += 1;
+                } else {
+                    trigrams_local[ngram] = 1;
+                }
             }
+        }
+#pragma omp critical
+        {
+            merge_trigrams(trigrams_local);
         }
     }
 }
+
+void ParallelSoA::merge_trigrams(map<string, int> local_trigrams) {
+    map<string, int>::iterator it;
+    for (it = local_trigrams.begin(); it != local_trigrams.end(); it++)
+    {
+        if (trigrams.find(it->first) != trigrams.end()) {
+            trigrams[it->first] += it->second;
+        } else {
+            trigrams[it->first] = it->second;
+        }
+    }
+}
+
 
 double ParallelSoA::calc_average_bi() {
     double tot = 0;

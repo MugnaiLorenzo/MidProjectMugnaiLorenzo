@@ -48,10 +48,10 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /snap/clion/274/bin/cmake/linux/x64/bin/cmake
+CMAKE_COMMAND = /snap/clion/275/bin/cmake/linux/x64/bin/cmake
 
 # The command to remove a file.
-RM = /snap/clion/274/bin/cmake/linux/x64/bin/cmake -E rm -f
+RM = /snap/clion/275/bin/cmake/linux/x64/bin/cmake -E rm -f
 
 # Escaping for special characters.
 EQUALS = =
@@ -68,7 +68,7 @@ CMAKE_BINARY_DIR = /home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/cmake-bui
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "No interactive CMake dialog available..."
-	/snap/clion/274/bin/cmake/linux/x64/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+	/snap/clion/275/bin/cmake/linux/x64/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -78,7 +78,7 @@ edit_cache/fast: edit_cache
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Running CMake to regenerate build system..."
-	/snap/clion/274/bin/cmake/linux/x64/bin/cmake --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	/snap/clion/275/bin/cmake/linux/x64/bin/cmake --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : rebuild_cache
 
 # Special rule for the target rebuild_cache
@@ -128,54 +128,6 @@ MidProjectMugnaiLorenzo: cmake_check_build_system
 MidProjectMugnaiLorenzo/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MidProjectMugnaiLorenzo.dir/build.make CMakeFiles/MidProjectMugnaiLorenzo.dir/build
 .PHONY : MidProjectMugnaiLorenzo/fast
-
-AoS/Manage.o: AoS/Manage.cpp.o
-.PHONY : AoS/Manage.o
-
-# target to build an object file
-AoS/Manage.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MidProjectMugnaiLorenzo.dir/build.make CMakeFiles/MidProjectMugnaiLorenzo.dir/AoS/Manage.cpp.o
-.PHONY : AoS/Manage.cpp.o
-
-AoS/Manage.i: AoS/Manage.cpp.i
-.PHONY : AoS/Manage.i
-
-# target to preprocess a source file
-AoS/Manage.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MidProjectMugnaiLorenzo.dir/build.make CMakeFiles/MidProjectMugnaiLorenzo.dir/AoS/Manage.cpp.i
-.PHONY : AoS/Manage.cpp.i
-
-AoS/Manage.s: AoS/Manage.cpp.s
-.PHONY : AoS/Manage.s
-
-# target to generate assembly for a file
-AoS/Manage.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MidProjectMugnaiLorenzo.dir/build.make CMakeFiles/MidProjectMugnaiLorenzo.dir/AoS/Manage.cpp.s
-.PHONY : AoS/Manage.cpp.s
-
-AoS/ManageParallel.o: AoS/ManageParallel.cpp.o
-.PHONY : AoS/ManageParallel.o
-
-# target to build an object file
-AoS/ManageParallel.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MidProjectMugnaiLorenzo.dir/build.make CMakeFiles/MidProjectMugnaiLorenzo.dir/AoS/ManageParallel.cpp.o
-.PHONY : AoS/ManageParallel.cpp.o
-
-AoS/ManageParallel.i: AoS/ManageParallel.cpp.i
-.PHONY : AoS/ManageParallel.i
-
-# target to preprocess a source file
-AoS/ManageParallel.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MidProjectMugnaiLorenzo.dir/build.make CMakeFiles/MidProjectMugnaiLorenzo.dir/AoS/ManageParallel.cpp.i
-.PHONY : AoS/ManageParallel.cpp.i
-
-AoS/ManageParallel.s: AoS/ManageParallel.cpp.s
-.PHONY : AoS/ManageParallel.s
-
-# target to generate assembly for a file
-AoS/ManageParallel.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MidProjectMugnaiLorenzo.dir/build.make CMakeFiles/MidProjectMugnaiLorenzo.dir/AoS/ManageParallel.cpp.s
-.PHONY : AoS/ManageParallel.cpp.s
 
 AoS/Ngram.o: AoS/Ngram.cpp.o
 .PHONY : AoS/Ngram.o
@@ -330,12 +282,6 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... MidProjectMugnaiLorenzo"
-	@echo "... AoS/Manage.o"
-	@echo "... AoS/Manage.i"
-	@echo "... AoS/Manage.s"
-	@echo "... AoS/ManageParallel.o"
-	@echo "... AoS/ManageParallel.i"
-	@echo "... AoS/ManageParallel.s"
 	@echo "... AoS/Ngram.o"
 	@echo "... AoS/Ngram.i"
 	@echo "... AoS/Ngram.s"

@@ -8,8 +8,6 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/AoS/Manage.cpp" "CMakeFiles/MidProjectMugnaiLorenzo.dir/AoS/Manage.cpp.o" "gcc" "CMakeFiles/MidProjectMugnaiLorenzo.dir/AoS/Manage.cpp.o.d"
-  "/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/AoS/ManageParallel.cpp" "CMakeFiles/MidProjectMugnaiLorenzo.dir/AoS/ManageParallel.cpp.o" "gcc" "CMakeFiles/MidProjectMugnaiLorenzo.dir/AoS/ManageParallel.cpp.o.d"
   "/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/AoS/Ngram.cpp" "CMakeFiles/MidProjectMugnaiLorenzo.dir/AoS/Ngram.cpp.o" "gcc" "CMakeFiles/MidProjectMugnaiLorenzo.dir/AoS/Ngram.cpp.o.d"
   "/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/AoS/ParallelAoS.cpp" "CMakeFiles/MidProjectMugnaiLorenzo.dir/AoS/ParallelAoS.cpp.o" "gcc" "CMakeFiles/MidProjectMugnaiLorenzo.dir/AoS/ParallelAoS.cpp.o.d"
   "/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/AoS/SequentialAoS.cpp" "CMakeFiles/MidProjectMugnaiLorenzo.dir/AoS/SequentialAoS.cpp.o" "gcc" "CMakeFiles/MidProjectMugnaiLorenzo.dir/AoS/SequentialAoS.cpp.o.d"

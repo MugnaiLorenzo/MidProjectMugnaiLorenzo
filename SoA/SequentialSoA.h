@@ -1,17 +1,16 @@
 #ifndef MIDPROJECTMUGNAILORENZO_SEQUENTIALSOA_H
 #define MIDPROJECTMUGNAILORENZO_SEQUENTIALSOA_H
-#include <vector>
 #include <string>
-#include <omp.h>
-#include <algorithm>
+#include <vector>
 #include <map>
-#include "../include/gplot++.h"
 
 using namespace std;
 
 class SequentialSoA {
 public:
-    explicit SequentialSoA(vector<string> t);
+    explicit SequentialSoA(int n);
+
+    void load_file(int n);
 
     void sequential_function();
 

@@ -2,22 +2,25 @@
 #define MIDPROJECTMUGNAILORENZO_PARALLELSOA_H
 #include <vector>
 #include <string>
-#include <omp.h>
-#include <algorithm>
 #include <map>
-#include "../include/gplot++.h"
 
 using namespace std;
 
 class ParallelSoA {
 public:
-    explicit ParallelSoA(vector<string> t);
+    explicit ParallelSoA(int n);
+
+    void load_file(int n);
 
     void sequential_function();
 
     void generateBigrams(const std::string &text);
 
+    void merge_bigrams(map<string, int> local_bigrams);
+
     void generateTrigrams(const std::string &text);
+
+    void merge_trigrams(map<string, int> local_trigrams);
 
     double calc_average_bi();
 

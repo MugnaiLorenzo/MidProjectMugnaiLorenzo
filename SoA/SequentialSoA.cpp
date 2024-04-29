@@ -1,8 +1,33 @@
 #include "SequentialSoA.h"
+#include <omp.h>
+#include <algorithm>
+#include <fstream>
+#include "../include/gplot++.h"
 
-SequentialSoA::SequentialSoA(vector<string> t) {
-    texts = t;
-    SequentialSoA::sequential_function();
+SequentialSoA::SequentialSoA(int n) {
+    load_file(n);
+    sequential_function();
+}
+
+void SequentialSoA::load_file(int n) {
+    string title;
+    for (int i = 0; i < n; i++) {
+        title = "./../Testi/book" + to_string(i) + ".txt";
+        string text;
+        ifstream newfile;
+        newfile.open(title, ios::in);
+        if (newfile.is_open()) {
+            string currentLine;
+            while (getline(newfile, currentLine)) {
+                if (!currentLine.empty()) {
+                    text += currentLine;
+                    text += "\n";
+                }
+            }
+            newfile.close();
+        }
+        texts.push_back(text);
+    }
 }
 
 void SequentialSoA::sequential_function() {
@@ -32,7 +57,7 @@ void SequentialSoA::generateBigrams(const std::string &text) {
             if (bigrams.find(ngram) != bigrams.end()) {
                 bigrams[ngram] += 1;
             } else {
-                bigrams[ngram] += 0;
+                bigrams[ngram] = 1;
             }
         }
     }
@@ -47,7 +72,7 @@ void SequentialSoA::generateTrigrams(const std::string &text) {
             if (trigrams.find(ngram) != trigrams.end()) {
                 trigrams[ngram] += 1;
             } else {
-                trigrams[ngram] += 0;
+                trigrams[ngram] = 1;
             }
         }
     }
@@ -78,7 +103,7 @@ void SequentialSoA::print_bi() {
         return a.second > b.second;
     });
     Gnuplot gnuplot{};
-    gnuplot.redirect_to_png("./../Image/SoA/sHistogramSequentialSoA_Bigrams.png");
+    gnuplot.redirect_to_png("./../Image/SoA/HistogramSequentialSoA_Bigrams.png");
     int i = 0;
     for (auto &pair: pairs) {
         if (i < 30) {

@@ -2,21 +2,25 @@
 #define MIDPROJECTMUGNAILORENZO_PARALLELAOS_H
 
 #include <string>
-#include <iostream>
-#include <fstream>
 #include <vector>
-#include <omp.h>
-#include <map>
-#include <algorithm>
-#include "ManageParallel.h"
+#include "Ngram.h"
+#include "../include/gplot++.h"
 
 using namespace std;
 
 class ParallelAoS {
 public:
-    explicit ParallelAoS(vector<string> t);
+    explicit ParallelAoS(int n);
+
+    void load_file(int n);
 
     void sequential_function();
+
+    void merge_bigrams(vector<Ngram *> local_bigrams);
+
+    int find_Bigrams(vector<Ngram *> bi, string b);
+
+    void printBi();
 
     void generateBigrams(const std::string &text);
 
@@ -26,12 +30,11 @@ public:
 
     vector<double> getTime();
 
-
 private:
     vector<string> texts;
-    ManageParallel m;
+    vector<Ngram *> bigrams;
     vector<double> time;
-    double average;
+    double average{};
 };
 
 

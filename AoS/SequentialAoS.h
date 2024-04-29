@@ -2,23 +2,24 @@
 #define MIDPROJECTMUGNAILORENZO_SEQUENTIALAOS_H
 
 #include <string>
-#include <iostream>
-#include <fstream>
 #include <vector>
-#include "Manage.h"
-#include <omp.h>
-#include <map>
-#include <algorithm>
+#include "Ngram.h"
 
 using namespace std;
 
 class SequentialAoS {
 public:
-    explicit SequentialAoS(vector<string> t);
+    explicit SequentialAoS(int n);
+
+    void load_file(int n);
 
     void sequential_function();
 
     void generateBigrams(const std::string &text);
+
+    bool addBigrams(string gram);
+
+    void printBi();
 
     double calc_average();
 
@@ -28,9 +29,9 @@ public:
 
 private:
     vector<string> texts;
-    Manage m;
+    vector<Ngram *> bigrams;
     vector<double> time;
-    double average;
+    double average{};
 };
 
 

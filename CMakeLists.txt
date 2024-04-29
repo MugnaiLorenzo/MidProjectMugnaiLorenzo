@@ -15,9 +15,6 @@ add_executable(MidProjectMugnaiLorenzo main.cpp
         AoS/SequentialAoS.h
         AoS/Ngram.cpp
         AoS/Ngram.h
-        AoS/Manage.cpp
-        AoS/Manage.h
         include/gnuplot.h
-        AoS/ManageParallel.cpp
-        AoS/ManageParallel.h)
+)
 target_link_libraries(MidProjectMugnaiLorenzo OpenMP::OpenMP_CXX)

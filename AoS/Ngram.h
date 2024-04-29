@@ -10,7 +10,11 @@ class Ngram {
 public:
     explicit Ngram(string ngram);
 
+    Ngram(string gram, int count);
+
     void add();
+
+    void add(int n);
 
     string getNgram();
 

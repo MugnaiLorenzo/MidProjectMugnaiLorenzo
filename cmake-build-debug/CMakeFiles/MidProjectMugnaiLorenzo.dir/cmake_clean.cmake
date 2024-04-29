@@ -1,8 +1,4 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/MidProjectMugnaiLorenzo.dir/AoS/Manage.cpp.o"
-  "CMakeFiles/MidProjectMugnaiLorenzo.dir/AoS/Manage.cpp.o.d"
-  "CMakeFiles/MidProjectMugnaiLorenzo.dir/AoS/ManageParallel.cpp.o"
-  "CMakeFiles/MidProjectMugnaiLorenzo.dir/AoS/ManageParallel.cpp.o.d"
   "CMakeFiles/MidProjectMugnaiLorenzo.dir/AoS/Ngram.cpp.o"
   "CMakeFiles/MidProjectMugnaiLorenzo.dir/AoS/Ngram.cpp.o.d"
   "CMakeFiles/MidProjectMugnaiLorenzo.dir/AoS/ParallelAoS.cpp.o"

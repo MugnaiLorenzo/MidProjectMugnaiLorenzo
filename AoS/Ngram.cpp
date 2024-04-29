@@ -6,8 +6,17 @@ Ngram::Ngram(string gram) {
     count = 1;
 }
 
+Ngram::Ngram(string gram, int n) {
+    ngram = gram;
+    count = n;
+}
+
 void Ngram::add() {
     count = count + 1;
+}
+
+void Ngram::add(int n) {
+    count = count + n;
 }
 
 string Ngram::getNgram() {

@@ -84,18 +84,6 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/AoS/Manage.cpp">
-			<Option target="MidProjectMugnaiLorenzo"/>
-		</Unit>
-		<Unit filename="/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/AoS/Manage.h">
-			<Option target="MidProjectMugnaiLorenzo"/>
-		</Unit>
-		<Unit filename="/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/AoS/ManageParallel.cpp">
-			<Option target="MidProjectMugnaiLorenzo"/>
-		</Unit>
-		<Unit filename="/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/AoS/ManageParallel.h">
-			<Option target="MidProjectMugnaiLorenzo"/>
-		</Unit>
 		<Unit filename="/home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/AoS/Ngram.cpp">
 			<Option target="MidProjectMugnaiLorenzo"/>
 		</Unit>
