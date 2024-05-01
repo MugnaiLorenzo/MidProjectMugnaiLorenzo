@@ -8,6 +8,8 @@ using namespace std;
 
 class SequentialSoA {
 public:
+    SequentialSoA(vector<string> t);
+
     explicit SequentialSoA(int n);
 
     void load_file(int n);

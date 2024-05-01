@@ -8,6 +8,8 @@ using namespace std;
 
 class ParallelSoA {
 public:
+    ParallelSoA(vector<string> t);
+
     explicit ParallelSoA(int n);
 
     void load_file(int n);

@@ -4,30 +4,9 @@
 #include <fstream>
 #include "../include/gplot++.h"
 
-SequentialSoA::SequentialSoA(int n) {
-    load_file(n);
+SequentialSoA::SequentialSoA(vector<string> t) {
+    texts = t;
     sequential_function();
-}
-
-void SequentialSoA::load_file(int n) {
-    string title;
-    for (int i = 0; i < n; i++) {
-        title = "./../Testi/book" + to_string(i) + ".txt";
-        string text;
-        ifstream newfile;
-        newfile.open(title, ios::in);
-        if (newfile.is_open()) {
-            string currentLine;
-            while (getline(newfile, currentLine)) {
-                if (!currentLine.empty()) {
-                    text += currentLine;
-                    text += "\n";
-                }
-            }
-            newfile.close();
-        }
-        texts.push_back(text);
-    }
 }
 
 void SequentialSoA::sequential_function() {

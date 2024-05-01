@@ -4,35 +4,9 @@
 #include <algorithm>
 #include "../include/gplot++.h"
 
-ParallelSoA::ParallelSoA(int n) {
-    load_file(n);
-#pragma omp barrier
+ParallelSoA::ParallelSoA(vector<string> t) {
+    texts = t;
     sequential_function();
-}
-
-void ParallelSoA::load_file(int n) {
-    string title;
-#pragma omp parallel for shared(n)
-    for (int i = 0; i < n; i++) {
-        title = "./../Testi/book" + to_string(i) + ".txt";
-        string text;
-        ifstream newfile;
-        while (!newfile.is_open()) {
-            newfile.open(title, ios::in);
-        }
-        if (newfile.is_open()) {
-            string currentLine;
-            while (getline(newfile, currentLine)) {
-                if (!currentLine.empty()) {
-                    text += currentLine;
-                    text += "\n";
-                }
-            }
-            newfile.close();
-        }
-#pragma omp critical
-        texts.push_back(text);
-    }
 }
 
 void ParallelSoA::sequential_function() {
@@ -79,8 +53,7 @@ void ParallelSoA::generateBigrams(const std::string &text) {
 
 void ParallelSoA::merge_bigrams(map<string, int> local_bigrams) {
     map<string, int>::iterator it;
-    for (it = local_bigrams.begin(); it != local_bigrams.end(); it++)
-    {
+    for (it = local_bigrams.begin(); it != local_bigrams.end(); it++) {
         if (bigrams.find(it->first) != bigrams.end()) {
             bigrams[it->first] += it->second;
         } else {
@@ -115,8 +88,7 @@ void ParallelSoA::generateTrigrams(const std::string &text) {
 
 void ParallelSoA::merge_trigrams(map<string, int> local_trigrams) {
     map<string, int>::iterator it;
-    for (it = local_trigrams.begin(); it != local_trigrams.end(); it++)
-    {
+    for (it = local_trigrams.begin(); it != local_trigrams.end(); it++) {
         if (trigrams.find(it->first) != trigrams.end()) {
             trigrams[it->first] += it->second;
         } else {

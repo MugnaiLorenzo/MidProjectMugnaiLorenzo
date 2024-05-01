@@ -9,28 +9,32 @@ using namespace std;
 
 class SequentialAoS {
 public:
-    explicit SequentialAoS(int n);
-
-    void load_file(int n);
+    SequentialAoS(vector<string> t);
 
     void sequential_function();
 
     void generateBigrams(const std::string &text);
 
+    void generateTrigrams(const std::string &text);
+
     bool addBigrams(string gram);
 
-    void printBi();
+    bool addTrigrams(string gram);
+
+    void print_bi();
+
+    void print_tri();
 
     double calc_average();
-
-    void print();
 
     vector<double> getTime();
 
 private:
     vector<string> texts;
+    vector<double> time_bi;
+    vector<double> time_tri;
     vector<Ngram *> bigrams;
-    vector<double> time;
+    vector<Ngram *> trigrams;
     double average{};
 };
 
