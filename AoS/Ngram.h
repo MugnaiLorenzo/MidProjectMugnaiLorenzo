@@ -1,29 +1,23 @@
-#ifndef MIDPROJECTMUGNAILORENZO_NGRAM_H
-#define MIDPROJECTMUGNAILORENZO_NGRAM_H
+#ifndef NGRAM_H
+#define NGRAM_H
 
 #include <string>
-#include <iostream>
-
-using namespace std;
 
 class Ngram {
 public:
-    explicit Ngram(string ngram);
-
-    Ngram(string gram, int count);
+    Ngram(); // Costruttore predefinito
+    Ngram(std::string gram);
+    Ngram(std::string gram, int count);
 
     void add();
-
     void add(int n);
 
-    string getNgram();
-
-    int getCount();
+    std::string getNgram() const;
+    int getCount() const;
 
 private:
-    string ngram;
+    std::string ngram;
     int count;
 };
 
-
-#endif //MIDPROJECTMUGNAILORENZO_NGRAM_H
+#endif // NGRAM_H

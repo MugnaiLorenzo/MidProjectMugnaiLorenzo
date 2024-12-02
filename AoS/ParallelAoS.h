@@ -1,47 +1,44 @@
-#ifndef MIDPROJECTMUGNAILORENZO_PARALLELAOS_H
-#define MIDPROJECTMUGNAILORENZO_PARALLELAOS_H
+#ifndef PARALLELAOS_H
+#define PARALLELAOS_H
 
 #include <string>
 #include <vector>
 #include "Ngram.h"
-#include "../include/gplot++.h"
-
-using namespace std;
 
 class ParallelAoS {
 public:
-    ParallelAoS(vector<string> texts);
+    // Costruttore
+    ParallelAoS(std::vector<std::string> t, int topN);
 
-    void sequential_function();
+// Funzione principale per la generazione parallela
+    void parallel_function();
 
-    void merge_bigrams(vector<Ngram *> local_bigrams);
-
-    void merge_trigrams(vector<Ngram *> local_trigrams);
-
-    int find_Bigrams(vector<Ngram *> bi, string b);
-
-    int find_Trigrams(vector<Ngram *> trigrams, string gram);
-
-    void print_bi();
-
-    void print_tri();
-
-    void generateBigrams(const std::string &text);
-
-    void generateTrigrams(const std::string &text);
-
-    double calc_average();
-
-    vector<double> getTime();
+    // Funzione per stampare i risultati e generare i grafici
+    void printResults() const;
 
 private:
-    vector<string> texts;
-    vector<double> time_bi;
-    vector<double> time_tri;
-    vector<Ngram *> bigrams;
-    vector<Ngram *> trigrams;
-    double average{};
+    // Generazione di n-grammi (bigrammi e trigrammi)
+    void generateNgrams(const std::string &text, int n, std::vector<Ngram> &ngrams_local);
+
+    // Fusione di n-grammi locali con i globali
+    void mergeNgrams(const std::vector<Ngram> &local_ngrams, std::vector<Ngram> &global_ngrams);
+
+    // Ricerca di un n-gramma
+    int findNgram(const std::vector<Ngram> &ngrams, const std::string &ngram) const;
+
+    // Generazione dei grafici per i n-grammi
+    void printNgrams(const std::vector<Ngram> &ngrams, const std::string &outputFile) const;
+
+    // Testi da analizzare
+    std::vector<std::string> texts;
+
+    // Contenitori per bigrammi e trigrammi
+    std::vector<Ngram> bigrams;
+    std::vector<Ngram> trigrams;
+
+    // Tempi di esecuzione
+    std::vector<double> time_bi;
+    std::vector<double> time_tri;
 };
 
-
-#endif //MIDPROJECTMUGNAILORENZO_PARALLELAOS_H
+#endif // PARALLELAOS_H

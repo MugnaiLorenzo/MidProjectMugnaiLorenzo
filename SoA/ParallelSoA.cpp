@@ -4,178 +4,82 @@
 #include <algorithm>
 #include "../include/gplot++.h"
 
-ParallelSoA::ParallelSoA(vector<string> t) {
-    texts = t;
-    sequential_function();
+// Costruttore
+ParallelSoA::ParallelSoA(std::vector<std::string> t, int topN) {
+    texts = std::move(t);
+    parallel_function();
 }
 
-void ParallelSoA::sequential_function() {
-    double start_time, end_time;
-    double t_bi = 0;
-    double t_tri = 0;
-    for (const auto &text: texts) {
-        start_time = omp_get_wtime();
-        generateBigrams(text);
-        end_time = omp_get_wtime();
-        t_bi = t_bi + end_time - start_time;
-        time_bi.push_back(t_bi);
-        start_time = omp_get_wtime();
-        generateTrigrams(text);
-        end_time = omp_get_wtime();
-        t_tri = t_tri + end_time - start_time;
-        time_tri.push_back(t_tri);
-    }
+// Funzione principale parallela
+void ParallelSoA::parallel_function() {
+    // Esecuzione parallela per bigrammi
+    generateNgrams(2, bigrams);
+    // Esecuzione parallela per trigrammi
+    generateNgrams(3, trigrams);
 }
 
-void ParallelSoA::generateBigrams(const std::string &text) {
-    int n = 2;
-    map<string, int> bigrams_local;
-#pragma omp parallel default(none) private(bigrams_local) shared(text, n)
+// Funzione generica per generare n-grammi
+void ParallelSoA::generateNgrams(int n, std::map<std::string, int> &ngrams) {
+    std::map<std::string, int> local_ngrams;
+
+#pragma omp parallel default(none) private(local_ngrams) shared(texts, n, ngrams)
     {
 #pragma omp for nowait
-        for (int i = 0; i < text.length() - n + 1; ++i) {
-            string ngram = text.substr(i, n);
-            transform(ngram.begin(), ngram.end(), ngram.begin(), ::tolower);
-            if (all_of(ngram.begin(), ngram.end(), ::isalpha)) {
-                if (bigrams_local.find(ngram) != bigrams_local.end()) {
-                    bigrams_local[ngram] += 1;
-                } else {
-                    bigrams_local[ngram] = 1;
+        for (size_t t = 0; t < texts.size(); ++t) {
+            for (size_t i = 0; i <= texts[t].size() - n; ++i) {
+                std::string ngram = texts[t].substr(i, n);
+                std::transform(ngram.begin(), ngram.end(), ngram.begin(), ::tolower);
+                if (std::all_of(ngram.begin(), ngram.end(), ::isalpha)) {
+                    local_ngrams[ngram]++;
                 }
             }
         }
+
 #pragma omp critical
-        {
-            merge_bigrams(bigrams_local);
-        }
+        mergeNgrams(local_ngrams, ngrams);
     }
 }
 
-void ParallelSoA::merge_bigrams(map<string, int> local_bigrams) {
-    map<string, int>::iterator it;
-    for (it = local_bigrams.begin(); it != local_bigrams.end(); it++) {
-        if (bigrams.find(it->first) != bigrams.end()) {
-            bigrams[it->first] += it->second;
-        } else {
-            bigrams[it->first] += it->second;
-        }
+// Funzione generica per fondere i risultati locali
+void ParallelSoA::mergeNgrams(const std::map<std::string, int> &local_ngrams, std::map<std::string, int> &global_ngrams) {
+    for (const auto &entry : local_ngrams) {
+        global_ngrams[entry.first] += entry.second;
     }
 }
 
-void ParallelSoA::generateTrigrams(const std::string &text) {
-    int n = 3;
-    map<string, int> trigrams_local;
-#pragma omp parallel default(none) private(trigrams_local) shared(text, n)
-    {
-#pragma omp for nowait
-        for (int i = 0; i < text.length() - n + 1; ++i) {
-            string ngram = text.substr(i, n);
-            transform(ngram.begin(), ngram.end(), ngram.begin(), ::tolower);
-            if (all_of(ngram.begin(), ngram.end(), ::isalpha)) {
-                if (trigrams_local.find(ngram) != trigrams_local.end()) {
-                    trigrams_local[ngram] += 1;
-                } else {
-                    trigrams_local[ngram] = 1;
-                }
-            }
-        }
-#pragma omp critical
-        {
-            merge_trigrams(trigrams_local);
-        }
-    }
-}
+// Funzione per stampare e generare grafici degli n-grammi
+void ParallelSoA::printNgrams(const std::map<std::string, int> &ngrams, const std::string &outputFile) const {
+    std::vector<std::pair<std::string, int>> sorted_ngrams(ngrams.begin(), ngrams.end());
+    std::sort(sorted_ngrams.begin(), sorted_ngrams.end(),
+              [](const auto &a, const auto &b) { return a.second > b.second; });
 
-void ParallelSoA::merge_trigrams(map<string, int> local_trigrams) {
-    map<string, int>::iterator it;
-    for (it = local_trigrams.begin(); it != local_trigrams.end(); it++) {
-        if (trigrams.find(it->first) != trigrams.end()) {
-            trigrams[it->first] += it->second;
-        } else {
-            trigrams[it->first] = it->second;
-        }
-    }
-}
+    Gnuplot gnuplot;
+    gnuplot.redirect_to_png(outputFile);
 
-
-double ParallelSoA::calc_average_bi() {
-    double tot = 0;
-    for (int j = 0; j < time_bi.size(); j++) {
-        tot = tot + time_bi[j];
-    }
-    return tot / time_bi.size();
-}
-
-double ParallelSoA::calc_average_tri() {
-    double tot = 0;
-    for (int j = 0; j < time_tri.size(); j++) {
-        tot = tot + time_tri[j];
-    }
-    return tot / time_tri.size();
-}
-
-void ParallelSoA::print_bi() {
-    vector<pair<string, int> > pairs;
-    for (auto &it: bigrams) {
-        pairs.push_back(it);
-    }
-    sort(pairs.begin(), pairs.end(), [](auto &a, auto &b) {
-        return a.second > b.second;
-    });
-    Gnuplot gnuplot{};
-    gnuplot.redirect_to_png("./../Image/SoA/HistogramParallelSoA_Bigrams.png");
     int i = 0;
-    for (auto &pair: pairs) {
-        if (i < 30) {
-            std::vector<int> x;
-            for (int j = 0; j < pair.second; j++) {
-                x.push_back(i + 1);
-                x.push_back(i + 2);
-            }
-            gnuplot.histogram(x, 2, pair.first);
+    for (const auto &pair : sorted_ngrams) {
+        if (i >= 10) break;
+        std::vector<int> x;
+        for (int j = 0; j < pair.second; j++) {
+            x.push_back(i + 1);
+            x.push_back(i + 2);
         }
+        gnuplot.histogram(x, 2, pair.first);
         i++;
     }
-    gnuplot.set_title("");
-    gnuplot.set_xlabel("Value");
-    gnuplot.set_ylabel("Number of counts");
-    gnuplot.set_xrange(0, 30);
+
+    gnuplot.set_title("N-grams Histogram");
+    gnuplot.set_xlabel("N-grams");
+    gnuplot.set_ylabel("Frequency");
+    gnuplot.set_xrange(0, 10);
     gnuplot.show();
 }
 
-void ParallelSoA::print_tri() {
-    vector<pair<string, int> > pairs;
-    for (auto &it: trigrams) {
-        pairs.push_back(it);
-    }
-    sort(pairs.begin(), pairs.end(), [](auto &a, auto &b) {
-        return a.second > b.second;
-    });
-    Gnuplot gnuplot{};
-    gnuplot.redirect_to_png("./../Image/SoA/HistogramParallelSoA_Trigrams.png");
-    int i = 0;
-    for (auto &pair: pairs) {
-        if (i < 30) {
-            std::vector<int> x;
-            for (int j = 0; j < pair.second; j++) {
-                x.push_back(i + 1);
-                x.push_back(i + 2);
-            }
-            gnuplot.histogram(x, 2, pair.first);
-        }
-        i++;
-    }
-    gnuplot.set_title("");
-    gnuplot.set_xlabel("Value");
-    gnuplot.set_ylabel("Number of counts");
-    gnuplot.set_xrange(0, 30);
-    gnuplot.show();
-}
+// Stampa dei risultati per bigrammi e trigrammi
+void ParallelSoA::printResults() const {
+    // Grafico per bigrammi
+    printNgrams(bigrams, "./../Image/SoA/HistogramParallelSoA_Bigrams.png");
 
-vector<double> ParallelSoA::getTime_bi() {
-    return time_bi;
-}
-
-vector<double> ParallelSoA::getTime_tri() {
-    return time_tri;
+    // Grafico per trigrammi
+    printNgrams(trigrams, "./../Image/SoA/HistogramParallelSoA_Trigrams.png");
 }

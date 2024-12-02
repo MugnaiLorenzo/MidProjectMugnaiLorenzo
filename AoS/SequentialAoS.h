@@ -1,42 +1,29 @@
-#ifndef MIDPROJECTMUGNAILORENZO_SEQUENTIALAOS_H
-#define MIDPROJECTMUGNAILORENZO_SEQUENTIALAOS_H
+#ifndef SEQUENTIALAOS_H
+#define SEQUENTIALAOS_H
 
 #include <string>
 #include <vector>
 #include "Ngram.h"
 
-using namespace std;
-
 class SequentialAoS {
 public:
-    SequentialAoS(vector<string> t);
+    SequentialAoS(const std::vector<std::string> &texts, int topN);
 
-    void sequential_function();
-
-    void generateBigrams(const std::string &text);
-
-    void generateTrigrams(const std::string &text);
-
-    bool addBigrams(string gram);
-
-    bool addTrigrams(string gram);
-
-    void print_bi();
-
-    void print_tri();
-
-    double calc_average();
-
-    vector<double> getTime();
+    // Stampa i risultati dei bigrammi e trigrammi usando Gnuplot
+    void printResults() const;
 
 private:
-    vector<string> texts;
-    vector<double> time_bi;
-    vector<double> time_tri;
-    vector<Ngram *> bigrams;
-    vector<Ngram *> trigrams;
-    double average{};
+    void processNgrams(int n, std::vector<Ngram> &ngrams);
+    void generateNgrams(const std::string &text, int n, std::vector<Ngram> &ngrams);
+    int findNgram(const std::vector<Ngram> &ngrams, const std::string &gram) const;
+
+    // Stampa i grafici con Gnuplot
+    void printTopNgramsGnuplot(const std::vector<Ngram> &ngrams, const std::string &outputFile) const;
+
+    std::vector<std::string> texts;
+    std::vector<Ngram> bigrams;
+    std::vector<Ngram> trigrams;
+    int topN; // Numero massimo di n-grammi da stampare
 };
 
-
-#endif //MIDPROJECTMUGNAILORENZO_SEQUENTIALAOS_H
+#endif // SEQUENTIALAOS_H

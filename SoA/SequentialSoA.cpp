@@ -1,91 +1,44 @@
 #include "SequentialSoA.h"
-#include <omp.h>
 #include <algorithm>
 #include <fstream>
 #include "../include/gplot++.h"
 
-SequentialSoA::SequentialSoA(vector<string> t) {
-    texts = t;
-    sequential_function();
+// Costruttore
+SequentialSoA::SequentialSoA(std::vector<std::string> t, int topN) : texts(std::move(t)) {
+    processNgrams(2, bigrams);
+    processNgrams(3, trigrams);
 }
 
-void SequentialSoA::sequential_function() {
-    double start_time, end_time;
-    double t_bi = 0;
-    double t_tri = 0;
-    for (const auto &text: texts) {
-        start_time = omp_get_wtime();
-        generateBigrams(text);
-        end_time = omp_get_wtime();
-        t_bi = t_bi + end_time - start_time;
-        time_bi.push_back(t_bi);
-        start_time = omp_get_wtime();
-        generateTrigrams(text);
-        end_time = omp_get_wtime();
-        t_tri = t_tri + end_time - start_time;
-        time_tri.push_back(t_tri);
+void SequentialSoA::processNgrams(int n, std::map<std::string, int> &ngrams) {
+    for (const auto &text : texts) {
+        generateNgrams(text, n, ngrams);
     }
 }
 
-void SequentialSoA::generateBigrams(const std::string &text) {
-    int n = 2;
-    for (int i = 0; i < text.length() - n + 1; ++i) {
-        string ngram = text.substr(i, n);
-        transform(ngram.begin(), ngram.end(), ngram.begin(), ::tolower);
-        if (all_of(ngram.begin(), ngram.end(), ::isalpha)) {
-            if (bigrams.find(ngram) != bigrams.end()) {
-                bigrams[ngram] += 1;
-            } else {
-                bigrams[ngram] = 1;
-            }
+// Funzione generica per la generazione di n-grammi
+void SequentialSoA::generateNgrams(const std::string &text, int n, std::map<std::string, int> &ngrams) {
+    for (size_t i = 0; i <= text.size() - n; ++i) {
+        std::string ngram = text.substr(i, n);
+        std::transform(ngram.begin(), ngram.end(), ngram.begin(), ::tolower);
+        if (std::all_of(ngram.begin(), ngram.end(), ::isalpha)) {
+            ngrams[ngram]++;
         }
     }
 }
 
-void SequentialSoA::generateTrigrams(const std::string &text) {
-    int n = 3;
-    for (int i = 0; i < text.length() - n + 1; ++i) {
-        string ngram = text.substr(i, n);
-        transform(ngram.begin(), ngram.end(), ngram.begin(), ::tolower);
-        if (all_of(ngram.begin(), ngram.end(), ::isalpha)) {
-            if (trigrams.find(ngram) != trigrams.end()) {
-                trigrams[ngram] += 1;
-            } else {
-                trigrams[ngram] = 1;
-            }
-        }
-    }
-}
-
-double SequentialSoA::calc_average_bi() {
-    double tot = 0;
-    for (int j = 0; j < time_bi.size(); j++) {
-        tot = tot + time_bi[j];
-    }
-    return tot / time_bi.size();
-}
-
-double SequentialSoA::calc_average_tri() {
-    double tot = 0;
-    for (int j = 0; j < time_tri.size(); j++) {
-        tot = tot + time_tri[j];
-    }
-    return tot / time_tri.size();
-}
-
-void SequentialSoA::print_bi() {
-    vector<pair<string, int> > pairs;
-    for (auto &it: bigrams) {
-        pairs.push_back(it);
-    }
-    sort(pairs.begin(), pairs.end(), [](auto &a, auto &b) {
+// Funzione generica per la stampa e la generazione dei grafici
+void SequentialSoA::printNgrams(const std::map<std::string, int> &ngrams, const std::string &outputFile) const {
+    std::vector<std::pair<std::string, int>> pairs(ngrams.begin(), ngrams.end());
+    std::sort(pairs.begin(), pairs.end(), [](const auto &a, const auto &b) {
         return a.second > b.second;
     });
-    Gnuplot gnuplot{};
-    gnuplot.redirect_to_png("./../Image/SoA/HistogramSequentialSoA_Bigrams.png");
+
+    Gnuplot gnuplot;
+    gnuplot.redirect_to_png(outputFile);
+
     int i = 0;
-    for (auto &pair: pairs) {
-        if (i < 30) {
+    for (const auto &pair : pairs) {
+        if (i < 10) {
             std::vector<int> x;
             for (int j = 0; j < pair.second; j++) {
                 x.push_back(i + 1);
@@ -95,46 +48,19 @@ void SequentialSoA::print_bi() {
         }
         i++;
     }
-    gnuplot.set_title("");
-    gnuplot.set_xlabel("Value");
-    gnuplot.set_ylabel("Number of counts");
-    gnuplot.set_xrange(0, 30);
+
+    gnuplot.set_title("N-grams Histogram");
+    gnuplot.set_xlabel("N-grams");
+    gnuplot.set_ylabel("Frequency");
+    gnuplot.set_xrange(1, 10);
     gnuplot.show();
 }
 
-void SequentialSoA::print_tri() {
-    vector<pair<string, int> > pairs;
-    for (auto &it: trigrams) {
-        pairs.push_back(it);
-    }
-    sort(pairs.begin(), pairs.end(), [](auto &a, auto &b) {
-        return a.second > b.second;
-    });
-    Gnuplot gnuplot{};
-    gnuplot.redirect_to_png("./../Image/SoA/HistogramSequentialSoA_Trigrams.png");
-    int i = 0;
-    for (auto &pair: pairs) {
-        if (i < 30) {
-            std::vector<int> x;
-            for (int j = 0; j < pair.second; j++) {
-                x.push_back(i + 1);
-                x.push_back(i + 2);
-            }
-            gnuplot.histogram(x, 2, pair.first);
-        }
-        i++;
-    }
-    gnuplot.set_title("");
-    gnuplot.set_xlabel("Value");
-    gnuplot.set_ylabel("Number of counts");
-    gnuplot.set_xrange(0, 30);
-    gnuplot.show();
-}
+// Stampa dei risultati (bigrammi e trigrammi)
+void SequentialSoA::printResults() const {
+    // Grafico per i bigrammi
+    printNgrams(bigrams, "./../Image/SoA/HistogramSequentialSoA_Bigrams.png");
 
-vector<double> SequentialSoA::getTime_bi() {
-    return time_bi;
-}
-
-vector<double> SequentialSoA::getTime_tri() {
-    return time_tri;
+    // Grafico per i trigrammi
+    printNgrams(trigrams, "./../Image/SoA/HistogramSequentialSoA_Trigrams.png");
 }

@@ -1,44 +1,48 @@
-#ifndef MIDPROJECTMUGNAILORENZO_SEQUENTIALSOA_H
-#define MIDPROJECTMUGNAILORENZO_SEQUENTIALSOA_H
-#include <string>
-#include <vector>
-#include <map>
+#ifndef SEQUENTIALSOA_H
+#define SEQUENTIALSOA_H
 
-using namespace std;
+#include <vector>
+#include <string>
+#include <map>
 
 class SequentialSoA {
 public:
-    SequentialSoA(vector<string> t);
+    // Costruttore
+    explicit SequentialSoA(std::vector<std::string> t);
 
-    explicit SequentialSoA(int n);
+    SequentialSoA(std::vector<std::string> t, int topN);
 
-    void load_file(int n);
-
+// Funzione principale
     void sequential_function();
 
-    void generateBigrams(const std::string &text);
+    // Stampa i risultati (grafici e output)
+    void printResults() const;
 
-    void generateTrigrams(const std::string &text);
-
+    // Calcolo della media dei tempi di esecuzione
     double calc_average_bi();
-
     double calc_average_tri();
 
-    void print_bi();
-
-    void print_tri();
-
-    vector<double> getTime_bi();
-
-    vector<double> getTime_tri();
+    // Recupero dei tempi
+    std::vector<double> getTime_bi();
+    std::vector<double> getTime_tri();
 
 private:
-    vector<string> texts;
-    vector<double> time_bi;
-    vector<double> time_tri;
-    map<string, int> bigrams;
-    map<string, int> trigrams;
+    // Funzione generica per la generazione di n-grammi
+    void generateNgrams(const std::string &text, int n, std::map<std::string, int> &ngrams);
+
+    // Funzione generica per la stampa e la generazione dei grafici
+    void printNgrams(const std::map<std::string, int> &ngrams, const std::string &outputFile) const;
+
+    // Testi e tempi
+    std::vector<std::string> texts;
+    std::vector<double> time_bi;
+    std::vector<double> time_tri;
+
+    // N-grammi
+    std::map<std::string, int> bigrams;
+    std::map<std::string, int> trigrams;
+
+    void processNgrams(int n, std::map<std::string, int> &ngrams);
 };
 
-
-#endif //MIDPROJECTMUGNAILORENZO_SEQUENTIALSOA_H
+#endif // SEQUENTIALSOA_H

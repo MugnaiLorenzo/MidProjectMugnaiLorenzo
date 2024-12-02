@@ -1,173 +1,120 @@
 #include "ParallelAoS.h"
 #include <omp.h>
 #include <algorithm>
-#include <fstream>
+#include <numeric>
+#include <iostream>
+#include "../include/gplot++.h"
 
-ParallelAoS::ParallelAoS(vector<string> t) {
-    texts = t;
-    sequential_function();
+// Costruttore
+ParallelAoS::ParallelAoS(std::vector<std::string> t, int topN) : texts(std::move(t)) {
+    parallel_function();
 }
 
-void ParallelAoS::sequential_function() {
-    double start_time, end_time;
-    double t = 0;
-    for (const auto &text: texts) {
-        start_time = omp_get_wtime();
-        generateBigrams(text);
-        end_time = omp_get_wtime();
-        t = t + end_time - start_time;
-        time_bi.push_back(t);
-        start_time = omp_get_wtime();
-        generateTrigrams(text);
-        end_time = omp_get_wtime();
-        t = t + end_time - start_time;
-        time_tri.push_back(t);
-    }
-}
+// Funzione parallela principale
+void ParallelAoS::parallel_function() {
+    double t_bi = 0, t_tri = 0;
 
-void ParallelAoS::generateBigrams(const std::string &text) {
-    vector<Ngram *> bigrams_local;
-    int n = 2;
-#pragma omp parallel private(bigrams_local) shared(text, n)
+#pragma omp parallel
     {
-#pragma omp for nowait
-        for (int i = 0; i < text.length() - n + 1; ++i) {
-            string ngram = text.substr(i, n);
-            transform(ngram.begin(), ngram.end(), ngram.begin(), ::tolower);
-            if (all_of(ngram.begin(), ngram.end(), ::isalpha)) {
-                int k = ParallelAoS::find_Bigrams(bigrams_local, ngram);
-                if (k == -1) {
-                    bigrams_local.push_back(new Ngram(ngram));
-                } else {
-                    bigrams_local[k]->add();
-                }
+        std::vector<Ngram> local_ngrams;
+
+        // Generazione parallela di bigrammi
+#pragma omp for nowait reduction(+:t_bi)
+        for (size_t i = 0; i < texts.size(); ++i) {
+            double start = omp_get_wtime();
+            generateNgrams(texts[i], 2, local_ngrams);
+            t_bi += omp_get_wtime() - start;
+        }
+
+#pragma omp critical
+        mergeNgrams(local_ngrams, bigrams);
+
+        local_ngrams.clear();
+
+        // Generazione parallela di trigrammi
+#pragma omp for nowait reduction(+:t_tri)
+        for (size_t i = 0; i < texts.size(); ++i) {
+            double start = omp_get_wtime();
+            generateNgrams(texts[i], 3, local_ngrams);
+            t_tri += omp_get_wtime() - start;
+        }
+
+#pragma omp critical
+        mergeNgrams(local_ngrams, trigrams);
+    }
+
+    time_bi.push_back(t_bi);
+    time_tri.push_back(t_tri);
+}
+
+// Generazione di n-grammi (bigrammi e trigrammi)
+void ParallelAoS::generateNgrams(const std::string &text, int n, std::vector<Ngram> &ngrams_local) {
+    for (size_t i = 0; i <= text.size() - n; ++i) {
+        std::string ngram = text.substr(i, n);
+        std::transform(ngram.begin(), ngram.end(), ngram.begin(), ::tolower);
+        if (std::all_of(ngram.begin(), ngram.end(), ::isalpha)) {
+            int index = findNgram(ngrams_local, ngram);
+            if (index == -1) {
+                ngrams_local.emplace_back(ngram);
+            } else {
+                ngrams_local[index].add();
             }
         }
-#pragma omp critical
-        {
-            merge_bigrams(bigrams_local);
-        }
     }
 }
 
-void ParallelAoS::generateTrigrams(const std::string &text) {
-    vector<Ngram *> trigrams_local;
-    int n = 3;
-#pragma omp parallel private(trigrams_local) shared(text, n)
-    {
-#pragma omp for nowait
-        for (int i = 0; i < text.length() - n + 1; ++i) {
-            string ngram = text.substr(i, n);
-            transform(ngram.begin(), ngram.end(), ngram.begin(), ::tolower);
-            if (all_of(ngram.begin(), ngram.end(), ::isalpha)) {
-                int k = ParallelAoS::find_Bigrams(trigrams_local, ngram);
-                if (k == -1) {
-                    trigrams_local.push_back(new Ngram(ngram));
-                } else {
-                    trigrams_local[k]->add();
-                }
-            }
-        }
-#pragma omp critical
-        {
-            merge_trigrams(trigrams_local);
-        }
-    }
-}
-
-void ParallelAoS::merge_bigrams(vector<Ngram *> local_bigrams) {
-    for (int i = 0; i < local_bigrams.size(); i++) {
-        int k = find_Bigrams(bigrams, local_bigrams[i]->getNgram());
-        if (k == -1) {
-            Ngram *b = new Ngram(local_bigrams[i]->getNgram(), local_bigrams[i]->getCount());
-            bigrams.push_back(b);
+// Fusione di n-grammi locali nei globali
+void ParallelAoS::mergeNgrams(const std::vector<Ngram> &local_ngrams, std::vector<Ngram> &global_ngrams) {
+    for (const auto &local_ngram : local_ngrams) {
+        int index = findNgram(global_ngrams, local_ngram.getNgram());
+        if (index == -1) {
+            global_ngrams.push_back(local_ngram);
         } else {
-            bigrams[k]->add(local_bigrams[i]->getCount());
+            global_ngrams[index].add(local_ngram.getCount());
         }
     }
 }
 
-void ParallelAoS::merge_trigrams(vector<Ngram *> local_trigrams) {
-    for (int i = 0; i < local_trigrams.size(); i++) {
-        int k = find_Trigrams(trigrams, local_trigrams[i]->getNgram());
-        if (k == -1) {
-            Ngram *b = new Ngram(local_trigrams[i]->getNgram(), local_trigrams[i]->getCount());
-            trigrams.push_back(b);
-        } else {
-            trigrams[k]->add(local_trigrams[i]->getCount());
-        }
-    }
-}
-
-int ParallelAoS::find_Bigrams(vector<Ngram *> bigrams, string gram) {
-    for (int k = 0; k < bigrams.size(); k++) {
-        if (bigrams[k]->getNgram() == gram) {
-            return k;
+// Ricerca di un n-gramma
+int ParallelAoS::findNgram(const std::vector<Ngram> &ngrams, const std::string &ngram) const {
+    for (size_t i = 0; i < ngrams.size(); ++i) {
+        if (ngrams[i].getNgram() == ngram) {
+            return static_cast<int>(i);
         }
     }
     return -1;
 }
 
-int ParallelAoS::find_Trigrams(vector<Ngram *> trigrams, string gram) {
-    for (int k = 0; k < trigrams.size(); k++) {
-        if (trigrams[k]->getNgram() == gram) {
-            return k;
-        }
-    }
-    return -1;
+// Stampa e grafici dei risultati
+void ParallelAoS::printResults() const {
+    // Grafico per i bigrammi
+    printNgrams(bigrams, "./../Image/AoS/HistogramParallelAoS_Bigrams.png");
+
+    // Grafico per i trigrammi
+    printNgrams(trigrams, "./../Image/AoS/HistogramParallelAoS_Trigrams.png");
 }
 
-void ParallelAoS::print_bi() {
-    sort(bigrams.begin(), bigrams.end(), [](Ngram *a, Ngram *b) {
-        return (a->getCount() > b->getCount());
-    });
-    Gnuplot gnuplot{};
-    gnuplot.redirect_to_png("./../Image/AoS/HistogramParallelAoS_Bigrams.png");
-    for (int i = 0; i < 30; i++) {
+// Funzione generica per la generazione dei grafici
+void ParallelAoS::printNgrams(const std::vector<Ngram> &ngrams, const std::string &outputFile) const {
+    auto sorted_ngrams = ngrams;
+    std::sort(sorted_ngrams.begin(), sorted_ngrams.end(),
+              [](const Ngram &a, const Ngram &b) { return a.getCount() > b.getCount(); });
+
+    Gnuplot gnuplot;
+    gnuplot.redirect_to_png(outputFile);
+
+    for (size_t i = 0; i < std::min(static_cast<size_t>(10), sorted_ngrams.size()); ++i) {
         std::vector<int> x;
-        for (int j = 0; j < bigrams[i]->getCount(); j++) {
+        for (int j = 0; j < sorted_ngrams[i].getCount(); j++) {
             x.push_back(i + 1);
             x.push_back(i + 2);
         }
-        gnuplot.histogram(x, 2, bigrams[i]->getNgram());
+        gnuplot.histogram(x, 2, sorted_ngrams[i].getNgram());
     }
-    gnuplot.set_title("");
-    gnuplot.set_xlabel("Value");
-    gnuplot.set_ylabel("Number of counts");
-    gnuplot.set_xrange(0, 30);
+
+    gnuplot.set_title("N-grams Histogram");
+    gnuplot.set_xlabel("N-grams");
+    gnuplot.set_ylabel("Frequency");
+    gnuplot.set_xrange(1, 10);
     gnuplot.show();
-}
-
-void ParallelAoS::print_tri() {
-    sort(trigrams.begin(), trigrams.end(), [](Ngram *a, Ngram *b) {
-        return (a->getCount() > b->getCount());
-    });
-    Gnuplot gnuplot{};
-    gnuplot.redirect_to_png("./../Image/AoS/HistogramParallelAoS_Trigrams.png");
-    for (int i = 0; i < 30; i++) {
-        std::vector<int> x;
-        for (int j = 0; j < trigrams[i]->getCount(); j++) {
-            x.push_back(i + 1);
-            x.push_back(i + 2);
-        }
-        gnuplot.histogram(x, 2, trigrams[i]->getNgram());
-    }
-    gnuplot.set_title("");
-    gnuplot.set_xlabel("Value");
-    gnuplot.set_ylabel("Number of counts");
-    gnuplot.set_xrange(0, 30);
-    gnuplot.show();
-}
-
-double ParallelAoS::calc_average() {
-    double tot;
-    for (int j = 0; j < time_bi.size(); j++) {
-        tot = tot + time_bi[j];
-    }
-    average = tot / time_bi.size();
-    return average;
-}
-
-vector<double> ParallelAoS::getTime() {
-    return time_bi;
 }

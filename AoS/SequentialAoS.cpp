@@ -1,128 +1,85 @@
 #include "SequentialAoS.h"
-#include <fstream>
-#include <omp.h>
+#include <iostream>
 #include <algorithm>
+#include <vector>
 #include "../include/gplot++.h"
 
-SequentialAoS::SequentialAoS(vector<string> t) {
-    texts = t;
-    sequential_function();
+SequentialAoS::SequentialAoS(const std::vector<std::string> &texts, int topN) : texts(texts), topN(topN) {
+    processNgrams(2, bigrams); // Genera bigrammi
+    processNgrams(3, trigrams); // Genera trigrammi
 }
 
-void SequentialAoS::sequential_function() {
-    double start_time, end_time;
-    double t = 0;
-    for (const auto &text: texts) {
-        start_time = omp_get_wtime();
-        generateBigrams(text);
-        end_time = omp_get_wtime();
-        t = t + end_time - start_time;
-        time_bi.push_back(t);
-        start_time = omp_get_wtime();
-        generateTrigrams(text);
-        end_time = omp_get_wtime();
-        t = t + end_time - start_time;
-        time_tri.push_back(t);
+void SequentialAoS::processNgrams(int n, std::vector<Ngram> &ngrams) {
+    for (const auto &text : texts) {
+        generateNgrams(text, n, ngrams);
     }
 }
 
-void SequentialAoS::generateBigrams(const std::string &text) {
-    const int n = 2;
-    for (int i = 0; i < text.length() - n + 1; ++i) {
-        string ngram = text.substr(i, n);
-        transform(ngram.begin(), ngram.end(), ngram.begin(), ::tolower);
-        if (all_of(ngram.begin(), ngram.end(), ::isalpha)) {
-            addBigrams(ngram);
+void SequentialAoS::generateNgrams(const std::string &text, int n, std::vector<Ngram> &ngrams) {
+    for (size_t i = 0; i < text.size() - n + 1; ++i) {
+        // Estrai l'n-gramma
+        std::string ngram = text.substr(i, n);
+
+        // Converti in minuscolo
+        std::transform(ngram.begin(), ngram.end(), ngram.begin(), ::tolower);
+
+        // Controlla che sia composto solo da lettere
+        if (std::all_of(ngram.begin(), ngram.end(), ::isalpha)) {
+            // Cerca l'n-gramma nel vettore
+            int index = findNgram(ngrams, ngram);
+
+            if (index == -1) {
+                // Aggiungi un nuovo oggetto Ngram al vettore
+                Ngram newNgram(ngram);
+                ngrams.push_back(newNgram);
+            } else {
+                // Incrementa il conteggio dell'n-gramma esistente
+                ngrams[index].add();
+            }
         }
     }
 }
 
-bool SequentialAoS::addBigrams(string gram) {
-    for (Ngram *b: bigrams) {
-        if (b->getNgram() == gram) {
-            b->add();
-            return true;
+int SequentialAoS::findNgram(const std::vector<Ngram> &ngrams, const std::string &gram) const {
+    for (size_t i = 0; i < ngrams.size(); ++i) {
+        if (ngrams[i].getNgram() == gram) {
+            return i;
         }
     }
-    Ngram *b = new Ngram(gram);
-    bigrams.push_back(b);
-    return false;
+    return -1; // Indica che non è stato trovato
 }
 
-void SequentialAoS::print_bi() {
-    sort(bigrams.begin(), bigrams.end(), [](Ngram *a, Ngram *b) {
-        return (a->getCount() > b->getCount());
-    });
-    Gnuplot gnuplot{};
-    gnuplot.redirect_to_png("./../Image/AoS/HistogramSequentialAoS_Bigrams.png");
-    for (int i = 0; i < 30; i++) {
+
+void SequentialAoS::printTopNgramsGnuplot(const std::vector<Ngram> &ngrams, const std::string &outputFile) const {
+    std::vector<Ngram> sorted_ngrams = ngrams;
+    std::sort(sorted_ngrams.begin(), sorted_ngrams.end(),
+              [](const Ngram &a, const Ngram &b) { return a.getCount() > b.getCount(); });
+
+    sorted_ngrams.resize(std::min(static_cast<size_t>(topN), sorted_ngrams.size()));
+
+    Gnuplot gnuplot;
+    gnuplot.redirect_to_png(outputFile);
+
+    for (size_t i = 0; i < sorted_ngrams.size(); ++i) {
         std::vector<int> x;
-        for (int j = 0; j < bigrams[i]->getCount(); j++) {
+        for (int j = 0; j < sorted_ngrams[i].getCount(); j++) {
             x.push_back(i + 1);
             x.push_back(i + 2);
         }
-        gnuplot.histogram(x, 2, bigrams[i]->getNgram());
+        gnuplot.histogram(x, 2, sorted_ngrams[i].getNgram());
     }
-    gnuplot.set_title("");
-    gnuplot.set_xlabel("Value");
-    gnuplot.set_ylabel("Number of counts");
-    gnuplot.set_xrange(0, 30);
+
+    gnuplot.set_title("Top " + std::to_string(topN) + " N-grams");
+    gnuplot.set_xlabel("N-grams");
+    gnuplot.set_ylabel("Frequency");
+    gnuplot.set_xrange(1, topN);
     gnuplot.show();
 }
 
-void SequentialAoS::generateTrigrams(const std::string &text) {
-    const int n = 3;
-    for (int i = 0; i < text.length() - n + 1; ++i) {
-        string ngram = text.substr(i, n);
-        transform(ngram.begin(), ngram.end(), ngram.begin(), ::tolower);
-        if (all_of(ngram.begin(), ngram.end(), ::isalpha)) {
-            addTrigrams(ngram);
-        }
-    }
-}
+void SequentialAoS::printResults() const {
+    // Grafico per i bigrammi
+    printTopNgramsGnuplot(bigrams, "./../Image/AoS/HistogramParallelAoS_Bigrams.png");
 
-bool SequentialAoS::addTrigrams(string gram) {
-    for (Ngram *b: trigrams) {
-        if (b->getNgram() == gram) {
-            b->add();
-            return true;
-        }
-    }
-    Ngram *b = new Ngram(gram);
-    trigrams.push_back(b);
-    return false;
-}
-
-void SequentialAoS::print_tri() {
-    sort(trigrams.begin(), trigrams.end(), [](Ngram *a, Ngram *b) {
-        return (a->getCount() > b->getCount());
-    });
-    Gnuplot gnuplot{};
-    gnuplot.redirect_to_png("./../Image/AoS/HistogramSequentialAoS_Trigrams.png");
-    for (int i = 0; i < 30; i++) {
-        std::vector<int> x;
-        for (int j = 0; j < trigrams[i]->getCount(); j++) {
-            x.push_back(i + 1);
-            x.push_back(i + 2);
-        }
-        gnuplot.histogram(x, 2, trigrams[i]->getNgram());
-    }
-    gnuplot.set_title("");
-    gnuplot.set_xlabel("Value");
-    gnuplot.set_ylabel("Number of counts");
-    gnuplot.set_xrange(0, 30);
-    gnuplot.show();
-}
-
-double SequentialAoS::calc_average() {
-    double tot = 0;
-    for (int j = 0; j < time_bi.size(); j++) {
-        tot = tot + time_bi[j];
-    }
-    average = tot / time_bi.size();
-    return average;
-}
-
-vector<double> SequentialAoS::getTime() {
-    return time_bi;
+    // Grafico per i trigrammi
+    printTopNgramsGnuplot(trigrams, "./../Image/AoS/HistogramParallelAoS_Trigrams.png");
 }

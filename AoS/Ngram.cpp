@@ -1,28 +1,23 @@
 #include "Ngram.h"
 
+Ngram::Ngram() : ngram(""), count(0) {} // Costruttore predefinito
 
-Ngram::Ngram(string gram) {
-    ngram = gram;
-    count = 1;
-}
+Ngram::Ngram(std::string gram) : ngram(gram), count(1) {}
 
-Ngram::Ngram(string gram, int n) {
-    ngram = gram;
-    count = n;
-}
+Ngram::Ngram(std::string gram, int count) : ngram(gram), count(count) {}
 
 void Ngram::add() {
-    count = count + 1;
+    count++;
 }
 
 void Ngram::add(int n) {
-    count = count + n;
+    count += n;
 }
 
-string Ngram::getNgram() {
+std::string Ngram::getNgram() const {
     return ngram;
 }
 
-int Ngram::getCount() {
+int Ngram::getCount() const {
     return count;
 }

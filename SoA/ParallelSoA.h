@@ -1,48 +1,39 @@
-#ifndef MIDPROJECTMUGNAILORENZO_PARALLELSOA_H
-#define MIDPROJECTMUGNAILORENZO_PARALLELSOA_H
+#ifndef PARALLELSOA_H
+#define PARALLELSOA_H
+
 #include <vector>
 #include <string>
 #include <map>
 
-using namespace std;
-
 class ParallelSoA {
 public:
-    ParallelSoA(vector<string> t);
+    // Costruttore
+    ParallelSoA(std::vector<std::string> t, int topN);
 
-    explicit ParallelSoA(int n);
+// Funzione principale
+    void parallel_function();
 
-    void load_file(int n);
-
-    void sequential_function();
-
-    void generateBigrams(const std::string &text);
-
-    void merge_bigrams(map<string, int> local_bigrams);
-
-    void generateTrigrams(const std::string &text);
-
-    void merge_trigrams(map<string, int> local_trigrams);
-
-    double calc_average_bi();
-
-    double calc_average_tri();
-
-    void print_bi();
-
-    void print_tri();
-
-    vector<double> getTime_bi();
-
-    vector<double> getTime_tri();
+    // Stampa dei risultati e generazione dei grafici
+    void printResults() const;
 
 private:
-    vector<string> texts;
-    vector<double> time_bi;
-    vector<double> time_tri;
-    map<string, int> bigrams;
-    map<string, int> trigrams;
+    // Generazione di n-grammi (bigrammi e trigrammi)
+    void generateNgrams(int n, std::map<std::string, int> &ngrams);
+
+    // Fusione dei risultati locali nei globali
+    void mergeNgrams(const std::map<std::string, int> &local_ngrams, std::map<std::string, int> &global_ngrams);
+
+    // Stampa e grafici degli n-grammi
+    void printNgrams(const std::map<std::string, int> &ngrams, const std::string &outputFile) const;
+
+    // Testi e tempi di esecuzione
+    std::vector<std::string> texts;
+    std::vector<double> time_bi;
+    std::vector<double> time_tri;
+
+    // Contenitori per bigrammi e trigrammi
+    std::map<std::string, int> bigrams;
+    std::map<std::string, int> trigrams;
 };
 
-
-#endif //MIDPROJECTMUGNAILORENZO_PARALLELAOS_H
+#endif // PARALLELSOA_H
