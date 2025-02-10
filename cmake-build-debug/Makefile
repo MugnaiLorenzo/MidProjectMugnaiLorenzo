@@ -48,10 +48,10 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /snap/clion/305/bin/cmake/linux/x64/bin/cmake
+CMAKE_COMMAND = /snap/clion/314/bin/cmake/linux/x64/bin/cmake
 
 # The command to remove a file.
-RM = /snap/clion/305/bin/cmake/linux/x64/bin/cmake -E rm -f
+RM = /snap/clion/314/bin/cmake/linux/x64/bin/cmake -E rm -f
 
 # Escaping for special characters.
 EQUALS = =
@@ -68,7 +68,7 @@ CMAKE_BINARY_DIR = /home/lorenzo/CLionProjects/MidProjectMugnaiLorenzo/cmake-bui
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "No interactive CMake dialog available..."
-	/snap/clion/305/bin/cmake/linux/x64/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+	/snap/clion/314/bin/cmake/linux/x64/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -78,7 +78,7 @@ edit_cache/fast: edit_cache
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Running CMake to regenerate build system..."
-	/snap/clion/305/bin/cmake/linux/x64/bin/cmake --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	/snap/clion/314/bin/cmake/linux/x64/bin/cmake --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : rebuild_cache
 
 # Special rule for the target rebuild_cache
@@ -249,6 +249,30 @@ SoA/SequentialSoA.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/MidProjectMugnaiLorenzo.dir/build.make CMakeFiles/MidProjectMugnaiLorenzo.dir/SoA/SequentialSoA.cpp.s
 .PHONY : SoA/SequentialSoA.cpp.s
 
+include/Benchmark.o: include/Benchmark.cpp.o
+.PHONY : include/Benchmark.o
+
+# target to build an object file
+include/Benchmark.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MidProjectMugnaiLorenzo.dir/build.make CMakeFiles/MidProjectMugnaiLorenzo.dir/include/Benchmark.cpp.o
+.PHONY : include/Benchmark.cpp.o
+
+include/Benchmark.i: include/Benchmark.cpp.i
+.PHONY : include/Benchmark.i
+
+# target to preprocess a source file
+include/Benchmark.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MidProjectMugnaiLorenzo.dir/build.make CMakeFiles/MidProjectMugnaiLorenzo.dir/include/Benchmark.cpp.i
+.PHONY : include/Benchmark.cpp.i
+
+include/Benchmark.s: include/Benchmark.cpp.s
+.PHONY : include/Benchmark.s
+
+# target to generate assembly for a file
+include/Benchmark.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/MidProjectMugnaiLorenzo.dir/build.make CMakeFiles/MidProjectMugnaiLorenzo.dir/include/Benchmark.cpp.s
+.PHONY : include/Benchmark.cpp.s
+
 main.o: main.cpp.o
 .PHONY : main.o
 
@@ -297,6 +321,9 @@ help:
 	@echo "... SoA/SequentialSoA.o"
 	@echo "... SoA/SequentialSoA.i"
 	@echo "... SoA/SequentialSoA.s"
+	@echo "... include/Benchmark.o"
+	@echo "... include/Benchmark.i"
+	@echo "... include/Benchmark.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

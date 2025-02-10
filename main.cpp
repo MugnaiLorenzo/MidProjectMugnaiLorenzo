@@ -1,21 +1,23 @@
+#include "Benchmark.h"
 #include "AoS/SequentialAoS.h"
 #include "AoS/ParallelAoS.h"
 #include "SoA/SequentialSoA.h"
 #include "SoA/ParallelSoA.h"
+#include <iostream>
 #include <vector>
 #include <string>
-#include <iostream>
 #include <fstream>
 #include <sstream>
-#include <chrono> // Per misurare il tempo di esecuzione
-#include <omp.h>  // Per configurare i thread
+#include <chrono>
+#include <omp.h>
 
 using namespace std;
 
 // Funzione per caricare i file di testo
-void load_file(int n, vector<string> &texts) {
+void load_files(int n, vector<string> &texts) {
+    texts.clear(); // Svuota il vettore prima di ricaricare i file
     for (int i = 0; i < n; ++i) {
-        string filename = "./../Testi/book" + to_string(i) + ".txt";
+        string filename = "./../Testi/book" + to_string(i % 29) + ".txt"; // Cicla sui 29 libri disponibili
         ifstream file(filename);
         if (!file.is_open()) {
             cerr << "Errore: impossibile aprire il file " << filename << endl;
@@ -27,72 +29,93 @@ void load_file(int n, vector<string> &texts) {
     }
 }
 
-// Funzione generica per eseguire SequentialAoS o SequentialSoA
-template <typename SequentialType>
-void execute_sequential(const vector<string> &texts, int topN, const string &method_name) {
-    cout << "Esecuzione sequenziale (" << method_name << ")...\n";
+// Funzione generica per misurare i tempi delle implementazioni sequenziali
+template<typename SequentialType>
+double measureSequential(const vector<string> &texts, const string &method_name, int topN) {
     auto start_time = chrono::high_resolution_clock::now();
-
     SequentialType sequential(texts, topN);
-
     auto end_time = chrono::high_resolution_clock::now();
     sequential.printResults();
-    chrono::duration<double> elapsed_time = end_time - start_time;
-
-    cout << "Tempo di esecuzione sequenziale (" << method_name << "): "
-         << elapsed_time.count() << " secondi.\n";
+    return chrono::duration<double>(end_time - start_time).count();
 }
 
-// Funzione generica per eseguire ParallelAoS o ParallelSoA
-template <typename ParallelType>
-void execute_parallel(const vector<string> &texts, int max_threads, const string &method_name, int topN) {
-    cout << "\nEsecuzione parallela (" << method_name << ")...\n";
-    for (int threads = 2; threads <= max_threads; threads += 2) {
-        omp_set_num_threads(threads);
-        auto start_time = chrono::high_resolution_clock::now();
-
-        ParallelType parallel(texts, topN);
-        auto end_time = chrono::high_resolution_clock::now();
-        if (threads == 2) {
-            parallel.printResults(); // Stampa i risultati solo alla prima esecuzione
-        }
-        chrono::duration<double> elapsed_time = end_time - start_time;
-
-        cout << "Threads: " << threads
-             << ", Tempo di esecuzione parallela (" << method_name << "): "
-             << elapsed_time.count() << " secondi.\n";
-    }
+// Funzione generica per misurare i tempi delle implementazioni parallele
+template<typename ParallelType>
+double measureParallel(const vector<string> &texts, const string &method_name, int topN, bool vectorized = false, int threads = 1) {
+    omp_set_num_threads(threads);
+    auto start_time = chrono::high_resolution_clock::now();
+    ParallelType parallel(texts, topN, vectorized);
+    auto end_time = chrono::high_resolution_clock::now();
+    return chrono::duration<double>(end_time - start_time).count();
 }
 
 int main() {
-    // Numero di file da caricare
-    int n_books = 1;
-    // Numero massimo di n-grammi da stampare
-    int topN = 10;
+    int base_books = 29;  // Numero iniziale di libri
+    int max_iterations = 1; // Numero massimo di moltiplicazioni di 29 (es. 29, 58, 87, 116, ...)
+    int topN = 10; // Numero massimo di n-grammi da considerare
+    int max_threads = omp_get_max_threads();
 
-    // Carica i file di testo
-    vector<string> texts;
-    load_file(n_books, texts);
+    cout << "************ BENCHMARK N-GRAMS ************\n";
 
-    if (texts.empty()) {
-        cerr << "Errore: nessun file è stato caricato. Terminazione del programma." << endl;
-        return 1;
+    for (int i = 1; i <= max_iterations; ++i) {
+        int n_books = base_books * i;  // Progressione: 29, 58, 87, ...
+        vector<string> texts;
+        load_files(n_books, texts);
+
+        if (texts.empty()) {
+            cerr << "Errore: Nessun file caricato.\n";
+            return 1;
+        }
+
+        cout << "\n====== ANALISI CON " << n_books << " FILE DI TESTO ======\n";
+        Benchmark benchmark;
+
+        // SEQUENZIALE AoS
+        cout << "\n--- MODALITA' AoS ---\n";
+        double seq_time_aos = measureSequential<SequentialAoS>(texts, "SequentialAoS", topN);
+        cout << "Tempo di esecuzione Sequenziale AoS: " << seq_time_aos << " secondi\n";
+
+        // PARALLELO AoS
+        for (int threads = 2; threads <= max_threads; threads += 2) {
+            double par_time_aos = measureParallel<ParallelAoS>(texts, "ParallelAoS", topN, false, threads);
+            cout << "Parallel AoS con " << threads << " threads: " << par_time_aos << " secondi\n";
+            double speedup_aos = seq_time_aos / par_time_aos;
+            cout << "Speedup AoS: " << speedup_aos << "x\n";
+            benchmark.addResult("ParallelAoS", threads, par_time_aos);
+        }
+
+        // SEQUENZIALE SoA
+        cout << "\n--- MODALITA' SoA ---\n";
+        double seq_time_soa = measureSequential<SequentialSoA>(texts, "SequentialSoA", topN);
+        cout << "Tempo di esecuzione Sequenziale SoA: " << seq_time_soa << " secondi\n";
+
+        // PARALLELO SoA
+        for (int threads = 2; threads <= max_threads; threads += 2) {
+            double par_time_soa = measureParallel<ParallelSoA>(texts, "ParallelSoA", topN, false, threads);
+            cout << "Parallel SoA con " << threads << " threads: " << par_time_soa << " secondi\n";
+            double speedup_soa = seq_time_soa / par_time_soa;
+            cout << "Speedup SoA: " << speedup_soa << "x\n";
+            benchmark.addResult("ParallelSoA", threads, par_time_soa);
+        }
+
+        // PARALLELO SoA VETTORIZZATO
+        cout << "\n--- MODALITA' SoA VETTORIZZATA ---\n";
+        for (int threads = 2; threads <= max_threads; threads += 2) {
+            double vec_time_soa = measureParallel<ParallelSoA>(texts, "VectorizedSoA", topN, true, threads);
+            cout << "Parallel SoA Vettorizzato con " << threads << " threads: " << vec_time_soa << " secondi\n";
+            double speedup_vec_soa = seq_time_soa / vec_time_soa;
+            cout << "Speedup SoA Vettorizzato: " << speedup_vec_soa << "x\n";
+            benchmark.addResult("VectorizedSoA", threads, vec_time_soa);
+        }
+
+        // Generazione grafici per i tempi di esecuzione e speedup
+        string filename_base = "./../Image/ExecutionTimes_" + to_string(n_books) + ".png";
+        benchmark.plotExecutionTimes(filename_base);
+
+        string speedup_filename = "./../Image/Speedup_" + to_string(n_books) + ".png";
+        benchmark.plotSpeedup(speedup_filename);
     }
 
-    cout << "Caricati " << texts.size() << " file di testo.\n";
-
-    // Esecuzione sequenziale AoS
-    execute_sequential<SequentialAoS>(texts, topN, "AoS");
-
-    // Esecuzione sequenziale SoA
-    execute_sequential<SequentialSoA>(texts, topN, "SoA");
-
-    // Esecuzione parallela AoS
-    int max_threads = omp_get_max_threads();
-    execute_parallel<ParallelAoS>(texts, max_threads, "AoS", topN);
-
-    // Esecuzione parallela SoA
-    execute_parallel<ParallelSoA>(texts, max_threads, "SoA", topN);
-
+    cout << "\n************ TEST COMPLETATI ************\n";
     return 0;
 }

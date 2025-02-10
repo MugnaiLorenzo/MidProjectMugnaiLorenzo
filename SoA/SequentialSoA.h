@@ -12,6 +12,8 @@ public:
 
     SequentialSoA(std::vector<std::string> t, int topN);
 
+    SequentialSoA(const std::vector<std::string> vector1, int i, bool b);
+
 // Funzione principale
     void sequential_function();
 

@@ -8,7 +8,7 @@
 class ParallelAoS {
 public:
     // Costruttore
-    ParallelAoS(std::vector<std::string> t, int topN);
+    ParallelAoS(std::vector<std::string> t, int topN, bool use_vectorization);
 
 // Funzione principale per la generazione parallela
     void parallel_function();

@@ -9,7 +9,7 @@ class SequentialAoS {
 public:
     SequentialAoS(const std::vector<std::string> &texts, int topN);
 
-    // Stampa i risultati dei bigrammi e trigrammi usando Gnuplot
+// Stampa i risultati dei bigrammi e trigrammi usando Gnuplot
     void printResults() const;
 
 private:

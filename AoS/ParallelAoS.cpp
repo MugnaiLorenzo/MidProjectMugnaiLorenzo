@@ -6,7 +6,7 @@
 #include "../include/gplot++.h"
 
 // Costruttore
-ParallelAoS::ParallelAoS(std::vector<std::string> t, int topN) : texts(std::move(t)) {
+ParallelAoS::ParallelAoS(std::vector<std::string> t, int topN, bool use_vectorization) : texts(std::move(t)) {
     parallel_function();
 }
 

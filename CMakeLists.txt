@@ -16,5 +16,7 @@ add_executable(MidProjectMugnaiLorenzo main.cpp
         AoS/Ngram.cpp
         AoS/Ngram.h
         include/gnuplot.h
+        include/Benchmark.cpp
+        include/Benchmark.h
 )
 target_link_libraries(MidProjectMugnaiLorenzo OpenMP::OpenMP_CXX)
