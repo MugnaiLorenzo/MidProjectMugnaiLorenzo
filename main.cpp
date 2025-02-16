@@ -50,7 +50,7 @@ double measureParallel(const vector<string> &texts, const string &method_name, i
 }
 
 int main() {
-    int base_books = 29;  // Numero iniziale di libri
+    int base_books = 1;  // Numero iniziale di libri
     int max_iterations = 1; // Numero massimo di moltiplicazioni di 29 (es. 29, 58, 87, 116, ...)
     int topN = 10; // Numero massimo di n-grammi da considerare
     int max_threads = omp_get_max_threads();
@@ -58,7 +58,7 @@ int main() {
     cout << "************ BENCHMARK N-GRAMS ************\n";
 
     for (int i = 1; i <= max_iterations; ++i) {
-        int n_books = base_books * i;  // Progressione: 29, 58, 87, ...
+        int n_books = base_books * i * 2;
         vector<string> texts;
         load_files(n_books, texts);
 
@@ -74,7 +74,7 @@ int main() {
         cout << "\n--- MODALITA' AoS ---\n";
         double seq_time_aos = measureSequential<SequentialAoS>(texts, "SequentialAoS", topN);
         cout << "Tempo di esecuzione Sequenziale AoS: " << seq_time_aos << " secondi\n";
-
+        benchmark.addResult("ParallelAoS",1,seq_time_aos);
         // PARALLELO AoS
         for (int threads = 2; threads <= max_threads; threads += 2) {
             double par_time_aos = measureParallel<ParallelAoS>(texts, "ParallelAoS", topN, false, threads);
@@ -88,6 +88,8 @@ int main() {
         cout << "\n--- MODALITA' SoA ---\n";
         double seq_time_soa = measureSequential<SequentialSoA>(texts, "SequentialSoA", topN);
         cout << "Tempo di esecuzione Sequenziale SoA: " << seq_time_soa << " secondi\n";
+        benchmark.addResult("ParallelSoA",1,seq_time_soa);
+        benchmark.addResult("VectorizedSoA",1,seq_time_soa);
 
         // PARALLELO SoA
         for (int threads = 2; threads <= max_threads; threads += 2) {
@@ -109,11 +111,8 @@ int main() {
         }
 
         // Generazione grafici per i tempi di esecuzione e speedup
-        string filename_base = "./../Image/ExecutionTimes_" + to_string(n_books) + ".png";
-        benchmark.plotExecutionTimes(filename_base);
-
-        string speedup_filename = "./../Image/Speedup_" + to_string(n_books) + ".png";
-        benchmark.plotSpeedup(speedup_filename);
+        benchmark.plotExecutionTimes("./../Image/Plot/ExecutionTimes_", to_string(n_books));
+        benchmark.plotSpeedup("./../Image/Plot/Speedup_", to_string(n_books));
     }
 
     cout << "\n************ TEST COMPLETATI ************\n";

@@ -14,10 +14,10 @@ public:
     std::map<std::string, std::vector<double>> calculateSpeedup();
 
     // Genera un grafico per i tempi di esecuzione
-    void plotExecutionTimes(const std::string &outputFile);
+    void plotExecutionTimes(const std::string &outputFile, std::string n_book);
 
     // Genera un grafico per il speed-up
-    void plotSpeedup(const std::string &outputFile);
+    void plotSpeedup(const std::string &outputFile, std::string n_book);
 
 private:
     // Dati raccolti

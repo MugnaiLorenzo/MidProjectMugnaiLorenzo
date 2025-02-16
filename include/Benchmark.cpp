@@ -18,11 +18,11 @@ std::map<std::string, std::vector<double>> Benchmark::calculateSpeedup() {
     return speedups;
 }
 
-void Benchmark::plotExecutionTimes(const std::string &outputFile) {
+void Benchmark::plotExecutionTimes(const std::string &outputFile, std::string n_book) {
     Gnuplot gnuplot;
-    gnuplot.redirect_to_png(outputFile);
 
     for (const auto &[method, data] : results) {
+        gnuplot.redirect_to_png(outputFile + n_book+"_"+ method+".png");
         std::vector<int> threads;
         std::vector<double> times;
 
@@ -32,29 +32,30 @@ void Benchmark::plotExecutionTimes(const std::string &outputFile) {
         }
 
         gnuplot.plot(threads, times, method);
+        gnuplot.set_title("Execution Times");
+        gnuplot.set_xlabel("Threads");
+        gnuplot.set_ylabel("Time (seconds)");
+        gnuplot.show();
     }
-
-    gnuplot.set_title("Execution Times");
-    gnuplot.set_xlabel("Threads");
-    gnuplot.set_ylabel("Time (seconds)");
-    gnuplot.show();
 }
 
-void Benchmark::plotSpeedup(const std::string &outputFile) {
+void Benchmark::plotSpeedup(const std::string &outputFile, std::string n_book) {
     auto speedups = calculateSpeedup();
     Gnuplot gnuplot;
-    gnuplot.redirect_to_png(outputFile);
 
     for (const auto &[method, sp] : speedups) {
+        gnuplot.redirect_to_png(outputFile + n_book + "_"+ method + ".png");
         std::vector<int> threads;
-        for (size_t i = 0; i < sp.size(); ++i) {
-            threads.push_back(2 + i * 2);
+        threads.push_back(1);
+        for (size_t i = 1; i < sp.size(); ++i) {
+            threads.push_back( i * 2);
         }
+        gnuplot.set_xrange(1,12);
         gnuplot.plot(threads, sp, method);
+        gnuplot.set_title("Speedup");
+        gnuplot.set_xlabel("Threads");
+        gnuplot.set_ylabel("Speedup");
+        gnuplot.show();
     }
-
-    gnuplot.set_title("Speedup");
-    gnuplot.set_xlabel("Threads");
-    gnuplot.set_ylabel("Speedup");
-    gnuplot.show();
 }
+
