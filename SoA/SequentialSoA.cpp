@@ -4,7 +4,7 @@
 #include "../include/gplot++.h"
 
 // Costruttore
-SequentialSoA::SequentialSoA(std::vector<std::string> t, int topN) : texts(std::move(t)) {
+SequentialSoA::SequentialSoA(std::vector<std::string> t, int topN) : texts(std::move(t)), topN(topN) {
     processNgrams(2, bigrams);
     processNgrams(3, trigrams);
 }
@@ -38,7 +38,7 @@ void SequentialSoA::printNgrams(const std::map<std::string, int> &ngrams, const 
 
     int i = 0;
     for (const auto &pair : pairs) {
-        if (i < 10) {
+        if (i < topN) {
             std::vector<int> x;
             for (int j = 0; j < pair.second; j++) {
                 x.push_back(i + 1);
@@ -52,15 +52,15 @@ void SequentialSoA::printNgrams(const std::map<std::string, int> &ngrams, const 
     gnuplot.set_title("N-grams Histogram");
     gnuplot.set_xlabel("N-grams");
     gnuplot.set_ylabel("Frequency");
-    gnuplot.set_xrange(1, 10);
+    gnuplot.set_xrange(1, topN);
     gnuplot.show();
 }
 
 // Stampa dei risultati (bigrammi e trigrammi)
 void SequentialSoA::printResults() const {
     // Grafico per i bigrammi
-    printNgrams(bigrams, "./../Image/SoA/HistogramSequentialSoA_Bigrams.png");
+    printNgrams(bigrams, "./../Image/SoA/HistogramSequentialSoA_Bigrams_"+std::to_string(texts.size())+".png");
 
     // Grafico per i trigrammi
-    printNgrams(trigrams, "./../Image/SoA/HistogramSequentialSoA_Trigrams.png");
+    printNgrams(trigrams, "./../Image/SoA/HistogramSequentialSoA_Trigrams_"+std::to_string(texts.size())+".png");
 }

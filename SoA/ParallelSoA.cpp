@@ -7,7 +7,7 @@
 
 // Costruttore
 ParallelSoA::ParallelSoA(std::vector<std::string> t, int topN, bool use_vectorization)
-        : texts(std::move(t)), vectorized(use_vectorization) {
+        : texts(std::move(t)), vectorized(use_vectorization), topN(topN){
     parallel_function();
 }
 
@@ -115,15 +115,15 @@ void ParallelSoA::printNgrams(const std::map<std::string, int> &ngrams, const st
     gnuplot.set_title("N-grams Histogram");
     gnuplot.set_xlabel("N-grams");
     gnuplot.set_ylabel("Frequency");
-    gnuplot.set_xrange(0, 10);
+    gnuplot.set_xrange(1, topN);
     gnuplot.show();
 }
 
 // Stampa dei risultati per bigrammi e trigrammi
 void ParallelSoA::printResults() const {
     // Grafico per bigrammi
-    printNgrams(bigrams, "./../Image/SoA/HistogramParallelSoA_Bigrams.png");
+    printNgrams(bigrams, "./../Image/SoA/HistogramParallelSoA_Bigrams_"+std::to_string(texts.size())+".png");
 
     // Grafico per trigrammi
-    printNgrams(trigrams, "./../Image/SoA/HistogramParallelSoA_Trigrams.png");
+    printNgrams(trigrams, "./../Image/SoA/HistogramParallelSoA_Trigrams_"+std::to_string(texts.size())+".png");
 }

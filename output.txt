@@ -1,0 +1,187 @@
+************ BENCHMARK N-GRAMS ************
+
+====== ANALISI CON 58 FILE DI TESTO ======
+
+--- MODALITA' AoS ---
+Tempo di esecuzione Sequenziale AoS: 341.884690 secondi
+Parallel AoS con 2 threads: 172.185002 secondi
+Speedup AoS: 1.985566x
+Parallel AoS con 4 threads: 95.444259 secondi
+Speedup AoS: 3.582035x
+Parallel AoS con 6 threads: 84.209046 secondi
+Speedup AoS: 4.059952x
+Parallel AoS con 8 threads: 67.122770 secondi
+Speedup AoS: 5.093423x
+Parallel AoS con 10 threads: 65.066241 secondi
+Speedup AoS: 5.254410x
+Parallel AoS con 12 threads: 53.224780 secondi
+Speedup AoS: 6.423412x
+
+--- MODALITA' SoA ---
+Tempo di esecuzione Sequenziale SoA: 9.251444 secondi
+Parallel SoA con 2 threads: 4.740228 secondi
+Speedup SoA: 1.951688x
+Parallel SoA con 4 threads: 2.759745 secondi
+Speedup SoA: 3.352282x
+Parallel SoA con 6 threads: 2.280694 secondi
+Speedup SoA: 4.056416x
+Parallel SoA con 8 threads: 1.918024 secondi
+Speedup SoA: 4.823424x
+Parallel SoA con 10 threads: 1.879806 secondi
+Speedup SoA: 4.921488x
+Parallel SoA con 12 threads: 1.703640 secondi
+Speedup SoA: 5.430397x
+
+--- MODALITA' SoA VETTORIZZATA ---
+Parallel SoA Vettorizzato con 2 threads: 6.398378 secondi
+Speedup SoA Vettorizzato: 1.445905x
+Parallel SoA Vettorizzato con 4 threads: 3.635908 secondi
+Speedup SoA Vettorizzato: 2.544466x
+Parallel SoA Vettorizzato con 6 threads: 3.088115 secondi
+Speedup SoA Vettorizzato: 2.995822x
+Parallel SoA Vettorizzato con 8 threads: 2.534780 secondi
+Speedup SoA Vettorizzato: 3.649801x
+Parallel SoA Vettorizzato con 10 threads: 2.646911 secondi
+Speedup SoA Vettorizzato: 3.495185x
+Parallel SoA Vettorizzato con 12 threads: 2.315430 secondi
+Speedup SoA Vettorizzato: 3.995561x
+
+====== ANALISI CON 116 FILE DI TESTO ======
+
+--- MODALITA' AoS ---
+Tempo di esecuzione Sequenziale AoS: 682.225124 secondi
+Parallel AoS con 2 threads: 342.743391 secondi
+Speedup AoS: 1.990484x
+Parallel AoS con 4 threads: 172.711302 secondi
+Speedup AoS: 3.950090x
+Parallel AoS con 6 threads: 170.149640 secondi
+Speedup AoS: 4.009560x
+Parallel AoS con 8 threads: 140.684848 secondi
+Speedup AoS: 4.849315x
+Parallel AoS con 10 threads: 129.071190 secondi
+Speedup AoS: 5.285650x
+Parallel AoS con 12 threads: 118.741654 secondi
+Speedup AoS: 5.745457x
+
+--- MODALITA' SoA ---
+Tempo di esecuzione Sequenziale SoA: 18.509898 secondi
+Parallel SoA con 2 threads: 9.519924 secondi
+Speedup SoA: 1.944333x
+Parallel SoA con 4 threads: 4.786099 secondi
+Speedup SoA: 3.867429x
+Parallel SoA con 6 threads: 4.500605 secondi
+Speedup SoA: 4.112758x
+Parallel SoA con 8 threads: 3.927321 secondi
+Speedup SoA: 4.713110x
+Parallel SoA con 10 threads: 3.298451 secondi
+Speedup SoA: 5.611693x
+Parallel SoA con 12 threads: 2.982343 secondi
+Speedup SoA: 6.206496x
+
+--- MODALITA' SoA VETTORIZZATA ---
+Parallel SoA Vettorizzato con 2 threads: 12.833093 secondi
+Speedup SoA Vettorizzato: 1.442357x
+Parallel SoA Vettorizzato con 4 threads: 6.362431 secondi
+Speedup SoA Vettorizzato: 2.909249x
+Parallel SoA Vettorizzato con 6 threads: 6.414934 secondi
+Speedup SoA Vettorizzato: 2.885438x
+Parallel SoA Vettorizzato con 8 threads: 5.006512 secondi
+Speedup SoA Vettorizzato: 3.697164x
+Parallel SoA Vettorizzato con 10 threads: 4.687024 secondi
+Speedup SoA Vettorizzato: 3.949179x
+Parallel SoA Vettorizzato con 12 threads: 4.029095 secondi
+Speedup SoA Vettorizzato: 4.594059x
+
+====== ANALISI CON 174 FILE DI TESTO ======
+
+--- MODALITA' AoS ---
+Tempo di esecuzione Sequenziale AoS: 1026.293051 secondi
+Parallel AoS con 2 threads: 515.418925 secondi
+Speedup AoS: 1.991182x
+Parallel AoS con 4 threads: 265.153980 secondi
+Speedup AoS: 3.870555x
+Parallel AoS con 6 threads: 250.979089 secondi
+Speedup AoS: 4.089158x
+Parallel AoS con 8 threads: 220.856922 secondi
+Speedup AoS: 4.646868x
+Parallel AoS con 10 threads: 183.837972 secondi
+Speedup AoS: 5.582596x
+Parallel AoS con 12 threads: 160.464035 secondi
+Speedup AoS: 6.395782x
+
+--- MODALITA' SoA ---
+Tempo di esecuzione Sequenziale SoA: 27.906275 secondi
+Parallel SoA con 2 threads: 14.270532 secondi
+Speedup SoA: 1.955518x
+Parallel SoA con 4 threads: 7.543833 secondi
+Speedup SoA: 3.699217x
+Parallel SoA con 6 threads: 6.738457 secondi
+Speedup SoA: 4.141345x
+Parallel SoA con 8 threads: 5.251769 secondi
+Speedup SoA: 5.313691x
+Parallel SoA con 10 threads: 4.772711 secondi
+Speedup SoA: 5.847049x
+Parallel SoA con 12 threads: 4.350830 secondi
+Speedup SoA: 6.414012x
+
+--- MODALITA' SoA VETTORIZZATA ---
+Parallel SoA Vettorizzato con 2 threads: 19.327080 secondi
+Speedup SoA Vettorizzato: 1.443895x
+Parallel SoA Vettorizzato con 4 threads: 10.058589 secondi
+Speedup SoA Vettorizzato: 2.774373x
+Parallel SoA Vettorizzato con 6 threads: 9.266265 secondi
+Speedup SoA Vettorizzato: 3.011599x
+Parallel SoA Vettorizzato con 8 threads: 7.313265 secondi
+Speedup SoA Vettorizzato: 3.815844x
+Parallel SoA Vettorizzato con 10 threads: 6.797673 secondi
+Speedup SoA Vettorizzato: 4.105269x
+Parallel SoA Vettorizzato con 12 threads: 6.031926 secondi
+Speedup SoA Vettorizzato: 4.626428x
+
+====== ANALISI CON 232 FILE DI TESTO ======
+
+--- MODALITA' AoS ---
+Tempo di esecuzione Sequenziale AoS: 1378.748340 secondi
+Parallel AoS con 2 threads: 686.594986 secondi
+Speedup AoS: 2.008096x
+Parallel AoS con 4 threads: 343.669836 secondi
+Speedup AoS: 4.011840x
+Parallel AoS con 6 threads: 321.027684 secondi
+Speedup AoS: 4.294796x
+Parallel AoS con 8 threads: 265.594237 secondi
+Speedup AoS: 5.191183x
+Parallel AoS con 10 threads: 242.594314 secondi
+Speedup AoS: 5.683350x
+Parallel AoS con 12 threads: 208.803548 secondi
+Speedup AoS: 6.603089x
+
+--- MODALITA' SoA ---
+Tempo di esecuzione Sequenziale SoA: 37.109094 secondi
+Parallel SoA con 2 threads: 19.142053 secondi
+Speedup SoA: 1.938616x
+Parallel SoA con 4 threads: 9.583491 secondi
+Speedup SoA: 3.872190x
+Parallel SoA con 6 threads: 9.087289 secondi
+Speedup SoA: 4.083626x
+Parallel SoA con 8 threads: 6.872243 secondi
+Speedup SoA: 5.399852x
+Parallel SoA con 10 threads: 6.401204 secondi
+Speedup SoA: 5.797205x
+Parallel SoA con 12 threads: 5.484398 secondi
+Speedup SoA: 6.766302x
+
+--- MODALITA' SoA VETTORIZZATA ---
+Parallel SoA Vettorizzato con 2 threads: 26.105880 secondi
+Speedup SoA Vettorizzato: 1.421484x
+Parallel SoA Vettorizzato con 4 threads: 12.914742 secondi
+Speedup SoA Vettorizzato: 2.873390x
+Parallel SoA Vettorizzato con 6 threads: 12.577771 secondi
+Speedup SoA Vettorizzato: 2.950371x
+Parallel SoA Vettorizzato con 8 threads: 9.401105 secondi
+Speedup SoA Vettorizzato: 3.947312x
+Parallel SoA Vettorizzato con 10 threads: 8.821817 secondi
+Speedup SoA Vettorizzato: 4.206514x
+Parallel SoA Vettorizzato con 12 threads: 7.810356 secondi
+Speedup SoA Vettorizzato: 4.751268x
+
+************ TEST COMPLETATI ************

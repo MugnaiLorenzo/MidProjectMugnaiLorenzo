@@ -34,6 +34,7 @@ private:
     // Contenitori per bigrammi e trigrammi
     std::map<std::string, int> bigrams;
     std::map<std::string, int> trigrams;
+    int topN;
 };
 
 #endif // PARALLELSOA_H

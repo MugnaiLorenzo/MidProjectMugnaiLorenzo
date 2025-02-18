@@ -59,3 +59,112 @@ void Benchmark::plotSpeedup(const std::string &outputFile, std::string n_book) {
     }
 }
 
+void Benchmark::plotExecutionTimesComparison(const std::string &outputFile, std::string n_book) {
+    Gnuplot gnuplot;
+    gnuplot.redirect_to_png(outputFile + n_book + "_Comparison.png");
+
+    gnuplot.set_title("Execution Times Comparison");
+    gnuplot.set_xlabel("Threads");
+    gnuplot.set_ylabel("Time (seconds)");
+
+    // Definizione di colori personalizzati per ogni metodo
+    std::map<std::string, std::string> colors = {
+            {"ParallelAoS", "red"},
+            {"ParallelSoA", "blue"},
+            {"VectorizedSoA", "green"},
+            {"SequentialAoS", "black"},
+            {"SequentialSoA", "purple"}
+    };
+
+    std::stringstream plot_command;
+    int line_type = 1; // Indice per i diversi tipi di linee in Gnuplot
+
+    for (const auto &[method, data] : results) {
+        if (data.empty()) continue;
+
+        // Assegna uno stile di linea con colore specifico
+        gnuplot.sendcommand("set style line " + std::to_string(line_type) +
+                            " lt " + std::to_string(line_type) +
+                            " lc rgb '" + colors[method] + "'");
+
+        // Se è il primo metodo, avvia il comando plot, altrimenti aggiunge una virgola
+        if (line_type == 1) {
+            plot_command << "plot '-' using 1:2 with lines ls " << line_type << " title '" << method << "'";
+        } else {
+            plot_command << ", '-' using 1:2 with lines ls " << line_type << " title '" << method << "'";
+        }
+
+        line_type++;
+    }
+
+    // Esegui il comando di plotting
+    gnuplot.sendcommand(plot_command.str());
+
+    // Inserisci i dati per ogni metodo
+    for (const auto &[method, data] : results) {
+        if (data.empty()) continue;
+
+        for (const auto &[t, time] : data) {
+            gnuplot.sendcommand(std::to_string(t) + " " + std::to_string(time));
+        }
+        gnuplot.sendcommand("e"); // Termina la serie di dati
+    }
+
+    gnuplot.show();
+}
+
+
+void Benchmark::plotSpeedupComparison(const std::string &outputFile, std::string n_book) {
+    auto speedups = calculateSpeedup();
+    Gnuplot gnuplot;
+    gnuplot.redirect_to_png(outputFile + n_book + "_Comparison.png");
+
+    gnuplot.set_title("Speedup Comparison");
+    gnuplot.set_xlabel("Threads");
+    gnuplot.set_ylabel("Speedup");
+
+    std::map<std::string, std::string> colors = {
+            {"ParallelAoS", "red"},
+            {"ParallelSoA", "blue"},
+            {"VectorizedSoA", "green"},
+            {"SequentialAoS", "black"},
+            {"SequentialSoA", "purple"}
+    };
+
+    std::stringstream plot_command;
+    int line_type = 1;
+
+    for (const auto &[method, sp] : speedups) {
+        if (sp.empty()) continue;
+
+        gnuplot.sendcommand("set style line " + std::to_string(line_type) +
+                            " lt " + std::to_string(line_type) +
+                            " lc rgb '" + colors[method] + "'");
+
+        if (line_type == 1) {
+            plot_command << "plot '-' using 1:2 with lines ls " << line_type << " title '" << method << "'";
+        } else {
+            plot_command << ", '-' using 1:2 with lines ls " << line_type << " title '" << method << "'";
+        }
+
+        line_type++;
+    }
+
+    gnuplot.sendcommand(plot_command.str());
+
+    for (const auto &[method, sp] : speedups) {
+        if (sp.empty()) continue;
+
+        for (size_t i = 0; i < sp.size(); ++i) {
+            int threads = (i == 0) ? 1 : (i * 2); // Primo valore = sequenziale, poi incremento di 2 thread per volta
+            gnuplot.sendcommand(std::to_string(threads) + " " + std::to_string(sp[i]));
+        }
+
+        gnuplot.sendcommand("e");
+    }
+
+    gnuplot.show();
+}
+
+
+

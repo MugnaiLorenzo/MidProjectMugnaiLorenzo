@@ -6,7 +6,7 @@
 #include "../include/gplot++.h"
 
 // Costruttore
-ParallelAoS::ParallelAoS(std::vector<std::string> t, int topN, bool use_vectorization) : texts(std::move(t)) {
+ParallelAoS::ParallelAoS(std::vector<std::string> t, int topN, bool use_vectorization) : texts(std::move(t)), topN(topN) {
     parallel_function();
 }
 
@@ -88,10 +88,10 @@ int ParallelAoS::findNgram(const std::vector<Ngram> &ngrams, const std::string &
 // Stampa e grafici dei risultati
 void ParallelAoS::printResults() const {
     // Grafico per i bigrammi
-    printNgrams(bigrams, "./../Image/AoS/HistogramParallelAoS_Bigrams.png");
+    printNgrams(bigrams, "./../Image/AoS/HistogramParallelAoS_Bigrams_"+std::to_string(texts.size())+".png");
 
     // Grafico per i trigrammi
-    printNgrams(trigrams, "./../Image/AoS/HistogramParallelAoS_Trigrams.png");
+    printNgrams(trigrams, "./../Image/AoS/HistogramParallelAoS_Trigrams_"+std::to_string(texts.size())+".png");
 }
 
 // Funzione generica per la generazione dei grafici
@@ -103,7 +103,7 @@ void ParallelAoS::printNgrams(const std::vector<Ngram> &ngrams, const std::strin
     Gnuplot gnuplot;
     gnuplot.redirect_to_png(outputFile);
 
-    for (size_t i = 0; i < std::min(static_cast<size_t>(10), sorted_ngrams.size()); ++i) {
+    for (size_t i = 0; i < std::min(static_cast<size_t>(topN), sorted_ngrams.size()); ++i) {
         std::vector<int> x;
         for (int j = 0; j < sorted_ngrams[i].getCount(); j++) {
             x.push_back(i + 1);
@@ -115,6 +115,6 @@ void ParallelAoS::printNgrams(const std::vector<Ngram> &ngrams, const std::strin
     gnuplot.set_title("N-grams Histogram");
     gnuplot.set_xlabel("N-grams");
     gnuplot.set_ylabel("Frequency");
-    gnuplot.set_xrange(1, 10);
+    gnuplot.set_xrange(1, topN);
     gnuplot.show();
 }

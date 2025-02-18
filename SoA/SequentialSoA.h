@@ -45,6 +45,8 @@ private:
     std::map<std::string, int> trigrams;
 
     void processNgrams(int n, std::map<std::string, int> &ngrams);
+
+    int topN;
 };
 
 #endif // SEQUENTIALSOA_H

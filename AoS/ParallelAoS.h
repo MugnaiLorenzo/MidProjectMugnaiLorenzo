@@ -39,6 +39,7 @@ private:
     // Tempi di esecuzione
     std::vector<double> time_bi;
     std::vector<double> time_tri;
+    int topN;
 };
 
 #endif // PARALLELAOS_H

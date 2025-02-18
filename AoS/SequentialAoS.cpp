@@ -78,8 +78,8 @@ void SequentialAoS::printTopNgramsGnuplot(const std::vector<Ngram> &ngrams, cons
 
 void SequentialAoS::printResults() const {
     // Grafico per i bigrammi
-    printTopNgramsGnuplot(bigrams, "./../Image/AoS/HistogramParallelAoS_Bigrams.png");
+    printTopNgramsGnuplot(bigrams, "./../Image/AoS/HistogramSequentialAoS_Bigrams_"+std::to_string(texts.size())+".png");
 
     // Grafico per i trigrammi
-    printTopNgramsGnuplot(trigrams, "./../Image/AoS/HistogramParallelAoS_Trigrams.png");
+    printTopNgramsGnuplot(trigrams, "./../Image/AoS/HistogramSequentialAoS_Trigrams_"+std::to_string(texts.size())+".png");
 }

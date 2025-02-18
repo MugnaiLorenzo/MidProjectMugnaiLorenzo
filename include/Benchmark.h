@@ -19,6 +19,12 @@ public:
     // Genera un grafico per il speed-up
     void plotSpeedup(const std::string &outputFile, std::string n_book);
 
+    // Genera un grafico comparativo per tutti i metodi (Execution Time)
+    void plotExecutionTimesComparison(const std::string &outputFile, std::string n_book);
+
+    // Genera un grafico comparativo per tutti i metodi (Speedup)
+    void plotSpeedupComparison(const std::string &outputFile, std::string n_book);
+
 private:
     // Dati raccolti
     std::map<std::string, std::vector<std::pair<int, double>>> results;
